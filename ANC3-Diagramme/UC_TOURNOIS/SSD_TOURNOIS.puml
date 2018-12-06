@@ -1,0 +1,27 @@
+@startuml SSD_TOURNOIS
+autonumber
+hide footbox
+skinparam shadowing false
+
+actor user as u
+participant système as s
+
+activate s
+s -> u :affiche la liste des tournois ainsi que les matchs et participants vides
+deactivate s
+activate u
+u -> s :sélectionne un tournoi de la liste
+activate s
+s -> u :affiche la liste des matchs et les participants du tournoi sélectionné
+alt Encode valeurs match
+    deactivate s
+    ref over u,s :SSD_ADD_MATCH
+
+else sélectionne un match
+    alt supprime match
+        ref over u,s :SSD_DELETE_MATCH
+    else modifie un match
+        ref over u,s :SSD_UPD_MATCH
+    end
+end
+@enduml

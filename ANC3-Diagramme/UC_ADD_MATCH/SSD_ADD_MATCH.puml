@@ -1,0 +1,27 @@
+@startuml SSD_ADD_MATCH
+autonumber
+hide footbox
+skinparam shadowing false
+
+actor user as u 
+participant système as s
+
+activate u  
+u -> s :sélectionne joueur 1
+activate s
+deactivate s
+u -> s :sélectionne joueur 2
+activate s
+deactivate s
+u -> s :sélection le resultat
+activate s
+deactivate s
+u -> s :ajout match
+deactivate u 
+activate s
+s -> s :verrification des données
+s -> s :ajout match
+s -> s :mise à jour liste des matchs
+s -> u :affiche la liste des matchs
+deactivate s
+@enduml

@@ -1,0 +1,31 @@
+@startuml CD
+package Model{
+    class Tournoi{
+        String nom
+        List<Match> listematch
+        List<Inscrit> listeinscrit
+
+    }
+    class Match{
+        Inscrit joueur1
+        Inscrit joueur2
+        Resultats r
+    }
+
+    class Inscrit{
+        String nom
+    }
+    class Resultats{
+        enum Resultats
+    }
+    class ListeTournois{
+        List<Tournois> listetournois
+    }
+}
+ListeTournois "1" o-r- "*" Tournoi : contient
+Tournoi "1" o-right- "*" Match : contient
+Tournoi "1" o-- "0*" Inscrit : possède
+Match "1" *-- "2" Inscrit :est composé
+Match *-- Resultats
+
+@enduml

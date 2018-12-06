@@ -1,0 +1,26 @@
+@startuml SD_DELETE_MATCH
+autonumber
+hide footbox
+skinparam shadowing false
+actor user as u
+participant ":Delete" as v <<View>>
+participant ":Controller" as c <<controller>>
+create v
+activate u
+activate c
+c -> v :new(o : Match)
+deactivate c
+v -> v : fillViewDelete()
+activate v
+deactivate v
+u -> v :confirme()
+
+activate v
+v -> c :deleteMatch(int)
+activate c
+c -> c :deleteMatch(int)
+c -> v :close()
+deactivate c
+deactivate v
+deactivate u
+@enduml

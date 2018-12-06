@@ -1,0 +1,68 @@
+@startuml SD_TOURNOIS
+autonumber
+hide footbox
+skinparam shadowing false
+actor user as u
+participant ":ListeTournoi" as v <<View>>
+participant ":Controller" as c <<controller>>
+participant ":Tournois" as lt <<Tournois>>
+participant ":Match" as lm <<Match>>
+
+create v
+activate c
+c -> v :new()
+deactivate c
+activate u
+v -> v : fillListeTournoi()
+activate v
+deactivate v
+u -> v :selectTournament(int)
+activate v
+v -> c :findTournament(int)
+activate c
+c -> lt : findTournament(int)
+activate lt
+lt --> c : t: Tournament
+deactivate lt
+c --> v :t: Tournament
+deactivate c
+deactivate v
+v -> v : fillListeMatchInscrit()
+activate v
+deactivate v
+alt setValuesMatch
+    ref over u,lm :SD_ADD_MATCH
+else selectMatchOnTournament
+    u -> v :selectMatch(int)
+    activate v
+    v -> c :findMatch(int)
+    activate c
+    c -> lm : findMatch(int)
+    activate lm
+    lm-->c: m: Match
+    deactivate lm
+    c --> v :m: Match
+    deactivate c
+    deactivate v
+
+    alt deleteMatch
+        u -> v :delete()
+        ref over u,lm :SD_DELETE_MATCH
+    else updateMatch
+
+        u -> v :selectMatch(int)
+        activate v
+        v -> c :findMatch(int)
+        activate c
+        c -> lm : findMatch(int)
+        activate lm
+        lm-->c: m: Match
+        deactivate lm
+        c --> v :m: Match
+        ref over u,lm :SD_UPD_MATCH
+        deactivate c
+        deactivate v
+
+    end
+end
+@enduml
