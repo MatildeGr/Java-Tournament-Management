@@ -9,13 +9,14 @@ activate s
 s -> u :affiche l'écran de confirmation
 deactivate s
 activate u
-u -> s :confirme
-
-activate s
+alt confirme 
 s -> s :supprime le match
 s -> s :mise à jour liste des matchs
+else annule
 s -> u :ferme l'écran de confirmation
+end
 s -> u :affiche la liste des matchs
 deactivate s
 deactivate u 
+
 @enduml
