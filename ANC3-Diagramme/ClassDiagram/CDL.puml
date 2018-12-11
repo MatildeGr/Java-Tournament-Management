@@ -42,7 +42,10 @@ package Controller{
     }
 }
 package View {
-    class GestionTournois<<View>>{
+    class ConfirmationSuppressionMatch<<View>>{
+        -Match deleteMatch
+    }
+     class GestionTournois<<View>>{
         -List<Tournois> listetournois
         -List<Match> listematchs
         -List<Inscrit> listeinscrits
