@@ -4,7 +4,7 @@ skinparam shadowing false
 
 package Model{
     class Tournoi{
-        String nom
+        - String nom
     }
     class Match{
         -Inscrit joueur1
@@ -33,24 +33,27 @@ package Controller{
         +setJoueur1()
         +setJoueur2()
         +setResultat()
+        +selectTournoi()
+        +selectMatch()
+        +selectUpdMatch(Inscrit joueur1,Inscrit joueur2, Resultats r)
+        +selectAddMatch(Inscrit joueur1,Inscrit joueur2, Resultats r)
+        +selectDeleteMatch(Match m)
 
     }
 }
-class GestionTournois<<View>>{
-    -List<Tournois> listetournois
-    -List<Match> listematchs
-    -List<Inscrit> listeinscrits
-    +selectTournoi()
-    +selectMatch()
-    +selectUpdMatch(Inscrit joueur1,Inscrit joueur2, Resultats r)
-    +selectAddMatch(Inscrit joueur1,Inscrit joueur2, Resultats r)
-    +selectDeleteMatch(Match m)
+package View {
+    class GestionTournois<<View>>{
+        -List<Tournois> listetournois
+        -List<Match> listematchs
+        -List<Inscrit> listeinscrits
+
+    }
 }
 ListeTournois "1" o-r- "*" Tournoi : contient
-Tournoi "1" o-right- "*" Match : contient
+Tournoi "1" o-r- "*" Match : contient
 Tournoi "1" o-- "0*" Inscrit : possède
 Match "1" *-- "2" Inscrit :est composé
 Match *-- Resultats
-Controller -u..> Model : use
-Controller"1" -l-> "1" GestionTournois
+Controller ..> Model : use
+View"1" <--"1" Controller
 @enduml
