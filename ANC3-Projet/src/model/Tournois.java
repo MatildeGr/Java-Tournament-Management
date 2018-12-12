@@ -1,31 +1,66 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-/**
- *
- * @author Matilde
- */
 public class Tournois extends Observable {
 
-    private String nom;
-    private List<Match> listematch = new ArrayList<>();
-    private List<Inscrit> listeinscrit = new ArrayList<>();
+    
+    private static final int MAX_WORD_LENGTH = 10;
+    private final List<Tournois> lsTournoi = new ArrayList();
+    private Inscrit inscrits = new Inscrit();
+    private int numLineSelected = -1;
 
-    public Tournois(String n) {
-        this.nom = n;
+    private String name;
+
+    public Tournois() {
+        initData();
     }
 
-    public Tournois(String n, List<Match> listem, List<Inscrit> listei) {
-        this.nom = n;
-        this.listematch = listem;
-        this.listeinscrit = listei;
+    public Tournois(String name) {
+        this.name = name;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public List<Tournois> getTournament() {
+        return this.lsTournoi;
+    }
+
+    public List<Inscrit> getAllInscrit() {
+        return this.inscrits.getList();
+    }
+
+    public int getNumLineSelected() {
+        return this.numLineSelected;
+    }
+
+    private boolean unicity(Tournois tournoi) {
+        return lsTournoi.stream().noneMatch((t) -> (t.getName().equals(tournoi.getName())));
+    }
+
+    public boolean addLine(Tournois tournoi) {
+        if (tournoi.getName().length() <= MAX_WORD_LENGTH && unicity(tournoi)) {
+            lsTournoi.add(tournoi);
+            numLineSelected = lsTournoi.size() - 1;
+            notif(TypeNotif.LINE_ADDED);
+            return true;
+        }
+        return false;
+    }
+
+    public void notif(TypeNotif typeNotif) {
+        setChanged();
+        notifyObservers(typeNotif);
+    }
+
+    private void initData() {
+        addLine(new Tournois("Tournoi 1"));
+        addLine(new Tournois("Tournoi 2"));
+        addLine(new Tournois("Tournoi 3"));
+    }
+
 }
