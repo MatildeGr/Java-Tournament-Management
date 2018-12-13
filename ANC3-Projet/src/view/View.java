@@ -5,6 +5,7 @@
  */
 package view;
 
+import ctrl.Ctrl;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.geometry.Insets;
@@ -13,12 +14,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.ListeTournois;
+import model.TypeNotif;
 
 /**
  *
@@ -45,7 +49,10 @@ public class View implements Observer {
     private final ComboBox cbRes = new ComboBox();
     private final Button add = new Button();
 
-    public View(Stage primaryStage) {
+    private final Ctrl ctrl;
+
+    public View(Stage primaryStage, Ctrl ctrl) {
+        this.ctrl = ctrl;
         configScene();
         Scene scene = new Scene(root, 1000, 700);
         primaryStage.setTitle("Gestion des tournois");
@@ -122,9 +129,27 @@ public class View implements Observer {
         configRoot();
     }
 
+    private SelectionModel<String> getListViewTournoi() {
+        return lvTournoi.getSelectionModel();
+    }
+
+    private void configSelectionLine() {
+        getListViewTournoi().selectedIndexProperty().addListener(o -> {
+            ctrl.lineSelection(getListViewTournoi().getSelectedIndex());
+        });
+    }
+
     @Override
     public void update(Observable o, Object o1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ListeTournois lstournois = (ListeTournois) o;
+        TypeNotif typeNotif = (TypeNotif) o1;
+        switch (typeNotif) {
+            case INIT:
+                lvTournoi.getItems().setAll(lstournois.getLines());
+                break;
+            case LINE_TOURNOI_SELECTED:
+                lvInscrit.getItems().setAll(lstournois.getAllJoueurToString(lstournois.getNumLineSelected()));
+        }
     }
 
 }
