@@ -1,0 +1,28 @@
+@startuml CDD
+package Model{
+    class Tournoi{
+        -String nom
+
+    }
+    class Match{
+        - Joueur joueur1
+        - Joueur joueur2
+        - Resultats r
+    }
+
+    class Joueur{
+        - String nom
+    }
+    class Resultats{
+        - enum Resultats
+    }
+    class ListeTournois{
+    }
+}
+ListeTournois "1" o-r- "*" Tournoi : contient
+Tournoi "1" o-right- "*" Match : contient
+Tournoi "1..*" o-- "0*" Joueur : est inscrit
+Match "1..*" *-- "2" Joueur :est composé
+Match *-- Resultats
+
+@enduml
