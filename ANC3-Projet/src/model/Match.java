@@ -11,20 +11,22 @@ public class Match extends Observable {
     public enum Resultats {
         GAIN_JOUEUR1, GAIN_JOUEUR2, MATCH_NULL;
     }
+
     public List<Match> getList() {
         return this.lsMatch;
     }
-
 
     private Tournoi tournois;
     private Joueur joueur1;
     private Joueur joueur2;
     private Resultats res;
 
+    //Constructeur de Match. 
     public Match() {
 
     }
 
+    //Constructeur de Match avec deux joueurs et un résultat. 
     public Match(Joueur s, Joueur s1, Resultats r) {
         this.joueur1 = s;
         this.joueur2 = s1;

@@ -51,6 +51,7 @@ public class View implements Observer {
 
     private final Ctrl ctrl;
 
+    //Constructeur de View.
     public View(Stage primaryStage, Ctrl ctrl) {
         this.ctrl = ctrl;
         configScene();
@@ -59,6 +60,7 @@ public class View implements Observer {
         primaryStage.setScene(scene);
     }
 
+    //Configuration de la partie Tournoi de la vue.
     private void configTournoi() {
         tournoi.setSpacing(SPACING);
         lbTournoi.setText("Tournois");
@@ -67,13 +69,15 @@ public class View implements Observer {
         tournoi.getChildren().addAll(lbTournoi, lvTournoi);
     }
 
+    //Configuration de la partie Inscrit de la vue.
     private void configInscrit() {
         inscrit.setSpacing(SPACING);
         lbInscrit.setText("Inscrits");
         lvInscrit.setPrefWidth(TEXTSIZEINSCRIT);
         inscrit.getChildren().addAll(lbInscrit, lvInscrit);
     }
-
+    
+    //Configuration de la partie Match de la vue. 
     private void configMatch() {
         configUpd();
         TableColumn joueur1 = new TableColumn("Joueur 1");
@@ -90,6 +94,7 @@ public class View implements Observer {
 
     }
 
+    //Configuration de la partie de modification ou d'ajout d'un match. 
     private void configUpd() {
         upd.setHgap(30);
         upd.setVgap(10);
