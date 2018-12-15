@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import ctrl.Ctrl;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,7 +17,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Joueur;
 import model.ListeTournois;
+import model.Match;
+import model.Match.Resultats;
+import model.Tournoi;
 import model.TypeNotif;
 
 /**
@@ -35,9 +35,9 @@ public class View implements Observer {
     private final VBox tournoi = new VBox(), inscrit = new VBox(), root = new VBox(), match = new VBox();
     private final HBox bas = new HBox();
     private final GridPane upd = new GridPane();
-    private final ListView<String> lvTournoi = new ListView<>();
-    private final ListView<String> lvInscrit = new ListView<>();
-    private final TableView<String> lvMatch = new TableView<>();
+    private final ListView<Tournoi> lvTournoi = new ListView<>();
+    private final ListView<Joueur> lvInscrit = new ListView<>();
+    private final TableView<Match> lvMatch = new TableView<>();
     private final Label lbTournoi = new Label();
     private final Label lbInscrit = new Label();
     private final Label lbMatch = new Label();
@@ -55,6 +55,7 @@ public class View implements Observer {
     public View(Stage primaryStage, Ctrl ctrl) {
         this.ctrl = ctrl;
         configScene();
+        configSelectionLine();
         Scene scene = new Scene(root, 1000, 700);
         primaryStage.setTitle("Gestion des tournois");
         primaryStage.setScene(scene);
@@ -76,13 +77,28 @@ public class View implements Observer {
         lvInscrit.setPrefWidth(TEXTSIZEINSCRIT);
         inscrit.getChildren().addAll(lbInscrit, lvInscrit);
     }
-    
+
     //Configuration de la partie Match de la vue. 
     private void configMatch() {
         configUpd();
-        TableColumn joueur1 = new TableColumn("Joueur 1");
-        TableColumn joueur2 = new TableColumn("Joueur 2");
-        TableColumn resultat = new TableColumn("Résultat");
+        final TableColumn<Match, Joueur> joueur1 = new TableColumn<>("Joueur 1");
+        joueur1.setCellValueFactory(param -> {
+            final Match m = param.getValue();
+            return new SimpleObjectProperty<>(m.getJoueur1());
+        });
+        final TableColumn<Match, Joueur> joueur2 = new TableColumn<>("Joueur 2");
+        joueur2.setCellValueFactory(param -> {
+            final Match m = param.getValue();
+            return new SimpleObjectProperty<>(m.getJoueur2());
+        });
+        final TableColumn<Match, Resultats> resultat = new TableColumn<>("Résultat");
+        resultat.setCellValueFactory(param -> {
+            final Match m = param.getValue();
+            return new SimpleObjectProperty<>(m.getResultats());
+        });
+        joueur1.setSortable(false);
+        joueur2.setSortable(false);
+        resultat.setSortable(false);
         joueur1.setPrefWidth(TABLEWIDTH);
         joueur2.setPrefWidth(TABLEWIDTH);
         resultat.setPrefWidth(TABLEWIDTH * 1.25);
@@ -134,7 +150,7 @@ public class View implements Observer {
         configRoot();
     }
 
-    private SelectionModel<String> getListViewTournoi() {
+    private SelectionModel<Tournoi> getListViewTournoi() {
         return lvTournoi.getSelectionModel();
     }
 
@@ -153,7 +169,8 @@ public class View implements Observer {
                 lvTournoi.getItems().setAll(lstournois.getLines());
                 break;
             case LINE_TOURNOI_SELECTED:
-                lvInscrit.getItems().setAll(lstournois.getAllJoueurToString(lstournois.getNumLineSelected()));
+                lvInscrit.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
+                lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
         }
     }
 

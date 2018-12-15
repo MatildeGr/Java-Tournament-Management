@@ -15,6 +15,11 @@ public class Joueur extends Observable {
     public Joueur() {
         initData();
     }
+    
+    //Constructeur d'un joueur grâce à un nom. 
+    public Joueur(String name) {
+        this.name = name;
+    }
 
     //Fonction qui renvoie une liste de string de la liste des joueurs inscrits. 
     public static List<String> getListToString(List<Joueur> lsinscrits) {
@@ -24,12 +29,16 @@ public class Joueur extends Observable {
         });
         return res;
     }
+    @Override
+    public String toString(){
+        return name;
+    }
 
     //Fonction qui renvoie la liste des joueurs. 
     public List<Joueur> getList() {
         return this.lsinscrits;
     }
-    
+
     //Fonction qui initialiste les données des joueurs. 
     private void initData() {
         lsinscrits.add(new Joueur("Matilde"));
@@ -37,11 +46,6 @@ public class Joueur extends Observable {
         lsinscrits.add(new Joueur("Papy Denis"));
         lsinscrits.add(new Joueur("Jean"));
         lsinscrits.add(new Joueur("Heude"));
-    }
-
-    //Constructeur d'un joueur grâce à un nom. 
-    public Joueur(String name) {
-        this.name = name;
     }
 
     //Fonction qui renvoie le nom d'un joueur. 

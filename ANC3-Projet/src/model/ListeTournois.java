@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.util.ArrayList;
@@ -10,10 +5,6 @@ import java.util.List;
 import java.util.Observable;
 import static model.Joueur.getListToString;
 
-/**
- *
- * @author 1501magravano
- */
 public class ListeTournois extends Observable {
 
     private final List<Tournoi> lsTournois = new ArrayList();
@@ -24,19 +15,17 @@ public class ListeTournois extends Observable {
         initData();
     }
 
-    //Fonction qui renvoie la liste de string de tous les tournois enregistrés. 
-    public List<String> getLines() {
-        List<String> res = new ArrayList<>();
-        lsTournois.forEach((t) -> {
-            res.add(t.getName());
-        });
-        return res;
+    public List<Tournoi> getLines() {
+        return lsTournois;
     }
 
     //Fonction qui renvoie la liste des joueurs inscrits d'un tournoi à une ligne sélectionnée.
     public List<Joueur> getAllInscrit(int numLineSelected) {
-        Tournoi t = lsTournois.get(numLineSelected);
-        return t.getAllInscrit();
+        return lsTournois.get(numLineSelected).getAllInscrit();
+    }
+
+    public List<Match> getAllMatch(int nulLineSelected) {
+        return lsTournois.get(numLineSelected).getAllMatch();
     }
 
     //Fonction qui renvoie une liste de String de tous les joueurs d'un tournoi à une ligne sélectionnée.

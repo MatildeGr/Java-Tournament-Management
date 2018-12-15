@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
@@ -15,6 +14,12 @@ public class Tournoi extends Observable {
     //Constructeur de Tournoi. 
     public Tournoi(String name) {
         this.name = name;
+    }
+    
+    
+    @Override
+    public String toString(){
+        return name;
     }
 
     //Getteur qui renvoie le nom d'un tournoi.
