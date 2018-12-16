@@ -16,9 +16,9 @@ public class Tournoi extends Observable {
         this.name = name;
     }
     
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
 
@@ -31,10 +31,39 @@ public class Tournoi extends Observable {
     public List<Joueur> getAllInscrit() {
         return this.lsinscrits.getList();
     }
+    
+    public int joueurSize(){
+        return lsinscrits.getSize();
+    }
 
     //Fonction qui renvoie la liste des matchs joués au tournoi. 
     public List<Match> getAllMatch() {
         return this.lsmatchs.getList();
+    }
+    
+    public int matchSize(){
+        return this.lsmatchs.getSize();
+    }
+    
+    public Joueur getJoueur(){
+        return lsinscrits;
+    }
+    public void selectJoueur(int joueur){
+        lsinscrits.selectJoueur(joueur);
+    }
+    public List<Joueur> adversaire(){
+        List<Joueur> res = lsinscrits.copyLst();
+        Joueur j = lsinscrits.JoueurSelected();
+        for(Match m : lsmatchs.getList()){
+            if(j.equals(m.getJoueur1())){
+                res.remove(m.getJoueur2());
+            }
+            if(j.equals(m.getJoueur2())){
+                res.remove(m.getJoueur1());
+            }
+        }
+        res.remove(j);
+        return res;
     }
 
     //Fonction qui change le type de notif. 

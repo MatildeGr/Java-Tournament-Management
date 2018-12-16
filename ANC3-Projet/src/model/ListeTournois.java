@@ -47,6 +47,25 @@ public class ListeTournois extends Observable {
     public int nbLines() {
         return lsTournois.size();
     }
+    
+    public int matchSize(){
+         return lsTournois.get(numLineSelected).matchSize();
+    }
+    
+    public int joueurSize(){
+        return lsTournois.get(numLineSelected).joueurSize();
+    }
+    
+    public void selectJoueurs(int joueur){
+        lsTournois.get(numLineSelected).selectJoueur(joueur);
+        notif(TypeNotif.CB1_SELECTED);
+    }
+    public void selectJoueur2(){
+        notif(TypeNotif.CB2_SELECTED);
+    }
+    public List<Joueur> getAdversaire(){
+        return lsTournois.get(numLineSelected).adversaire();
+    }
 
     //Fonction qui modifie le numéro de la ligne sélectionnée et qui change le type de notif. 
     public void select(int index) {

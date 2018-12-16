@@ -17,4 +17,14 @@ public class Ctrl {
             lstournois.unselect();
         }
     }
+
+    public void cb1Selection(int joueur) {
+        if (joueur >= 0 && joueur < lstournois.joueurSize()) {
+            lstournois.selectJoueurs(joueur);
+        }
+    }
+    public void cb2Selection() {
+        lstournois.selectJoueur2();
+    }
+
 }

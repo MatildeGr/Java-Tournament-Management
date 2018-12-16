@@ -1,6 +1,7 @@
 package view;
 
 import ctrl.Ctrl;
+import java.util.EnumSet;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.beans.property.SimpleObjectProperty;
@@ -44,9 +45,9 @@ public class View implements Observer {
     private final Label j1 = new Label();
     private final Label j2 = new Label();
     private final Label res = new Label();
-    private final ComboBox cbJ1 = new ComboBox();
-    private final ComboBox cbJ2 = new ComboBox();
-    private final ComboBox cbRes = new ComboBox();
+    private final ComboBox<Joueur> cbJ1 = new ComboBox();
+    private final ComboBox<Joueur> cbJ2 = new ComboBox();
+    private final ComboBox<Resultats> cbRes = new ComboBox();
     private final Button add = new Button();
 
     private final Ctrl ctrl;
@@ -56,6 +57,8 @@ public class View implements Observer {
         this.ctrl = ctrl;
         configScene();
         configSelectionLine();
+        configSelectionComboBox1();
+        configSelectionComboBox2();
         Scene scene = new Scene(root, 1000, 700);
         primaryStage.setTitle("Gestion des tournois");
         primaryStage.setScene(scene);
@@ -160,6 +163,16 @@ public class View implements Observer {
         });
     }
 
+    private void configSelectionComboBox1() {
+        cbJ1.getSelectionModel().selectedIndexProperty().addListener(
+                observable -> ctrl.cb1Selection(cbJ1.getSelectionModel().getSelectedIndex()));
+    }
+
+    private void configSelectionComboBox2() {
+        cbJ2.getSelectionModel().selectedIndexProperty().addListener(
+                observable -> ctrl.cb2Selection());
+    }
+
     @Override
     public void update(Observable o, Object o1) {
         ListeTournois lstournois = (ListeTournois) o;
@@ -171,7 +184,17 @@ public class View implements Observer {
             case LINE_TOURNOI_SELECTED:
                 lvInscrit.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
                 lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
+                cbJ1.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
+                break;
+            case CB1_SELECTED:
+                cbJ2.getItems().setAll(lstournois.getAdversaire());
+                break;
+            case CB2_SELECTED:
+                cbRes.getItems().setAll(EnumSet.allOf( Match.Resultats.class ));
+                break;
+
         }
+
     }
 
 }
