@@ -2,6 +2,7 @@ package model;
 
 import java.util.List;
 import java.util.Observable;
+import model.Match.Resultats;
 
 public class Tournoi extends Observable {
 
@@ -65,11 +66,16 @@ public class Tournoi extends Observable {
         res.remove(j);
         return res;
     }
-
-    //Fonction qui change le type de notif. 
-    public void notif(TypeNotif typeNotif) {
-        setChanged();
-        notifyObservers(typeNotif);
+    
+    public boolean addMatch(Joueur j1,Joueur j2,Resultats r){
+        lsmatchs.addMatch(j1,j2,r);
+        return true;
     }
+    public boolean addJoueur(String nom){
+        lsinscrits.addJoueur(nom);
+        return true;
+    }
+
+
 
 }

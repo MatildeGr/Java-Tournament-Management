@@ -1,5 +1,4 @@
 package model;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -18,17 +17,15 @@ public class Match extends Observable {
     private Resultats res;
 
     //Constructeur de} Match. 
-    public Match() {
-        initData();
-    }
-
+    public Match() {}
+    
     //Constructeur de Match avec deux joueurs et un résultat. 
     public Match(Joueur j1, Joueur j2, Resultats r) {
-      // if (valideMatch(j1, j2)) {
+       if (valideMatch(j1, j2)) {
             this.joueur1 = j1;
             this.joueur2 = j2;
             this.res = r;
-       // }
+        }
     }
 
     private boolean valideMatch(Joueur j1, Joueur j2) {
@@ -63,18 +60,5 @@ public class Match extends Observable {
         return lsMatch.size();
     }
 
-    public void notif(TypeNotif typeNotif) {
-        setChanged();
-        notifyObservers(typeNotif);
-    }
 
-    public void initData() {
-        lsMatch.add(new Match(new Joueur("joueur1"), new Joueur("joueur2"), Resultats.GAIN_JOUEUR1));
-        lsMatch.add(new Match(new Joueur("joueur3"), new Joueur("joueur4"), Resultats.GAIN_JOUEUR2));
-        lsMatch.add(new Match(new Joueur("joueur5"), new Joueur("joueur6"), Resultats.MATCH_NULL));
-        lsMatch.add(new Match(new Joueur("joueur1"), new Joueur("joueur2"), Resultats.GAIN_JOUEUR1));
-        lsMatch.add(new Match(new Joueur("Remy"), new Joueur("Matilde"), Resultats.GAIN_JOUEUR1));
-        lsMatch.add(new Match(new Joueur("Papy Denis"), new Joueur("Remy"), Resultats.GAIN_JOUEUR1));
-
-    }
 }

@@ -59,6 +59,7 @@ public class View implements Observer {
         configSelectionLine();
         configSelectionComboBox1();
         configSelectionComboBox2();
+        configListenerEditLine();
         Scene scene = new Scene(root, 1000, 700);
         primaryStage.setTitle("Gestion des tournois");
         primaryStage.setScene(scene);
@@ -172,6 +173,18 @@ public class View implements Observer {
         cbJ2.getSelectionModel().selectedIndexProperty().addListener(
                 observable -> ctrl.cb2Selection());
     }
+      private void configListenerEditLine() {
+        add.setOnAction(e -> {
+            if (cbJ1.getValue() != null && cbJ2.getValue() != null && cbRes.getValue() != null) {
+                ctrl.addMatch(cbJ1.getValue(),cbJ2.getValue(),cbRes.getValue());
+            }
+        });
+    }
+      private void reset_combobox(){
+          cbJ1.getItems().setAll();
+          cbJ2.getItems().setAll();
+          cbRes.getItems().setAll();
+      }
 
     @Override
     public void update(Observable o, Object o1) {
@@ -187,10 +200,18 @@ public class View implements Observer {
                 cbJ1.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
                 break;
             case CB1_SELECTED:
+                cbJ2.getItems().setAll();
                 cbJ2.getItems().setAll(lstournois.getAdversaire());
+                cbRes.getItems().setAll();
                 break;
             case CB2_SELECTED:
+                cbRes.getItems().setAll();
                 cbRes.getItems().setAll(EnumSet.allOf( Match.Resultats.class ));
+                break;
+                case ADD_MATCH:
+                lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
+                reset_combobox();
+                cbJ1.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
                 break;
 
         }

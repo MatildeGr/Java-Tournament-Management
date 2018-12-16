@@ -1,6 +1,8 @@
 package ctrl;
 
+import model.Joueur;
 import model.ListeTournois;
+import model.Match;
 
 public class Ctrl {
 
@@ -25,6 +27,9 @@ public class Ctrl {
     }
     public void cb2Selection() {
         lstournois.selectJoueur2();
+    }
+    public void addMatch(Joueur j1,Joueur j2,Match.Resultats r){
+        lstournois.addMatch(j1,j2,r);
     }
 
 }

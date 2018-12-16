@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import static model.Joueur.getListToString;
+import model.Match.Resultats;
 
 public class ListeTournois extends Observable {
 
@@ -88,7 +89,14 @@ public class ListeTournois extends Observable {
     //Fonction qui initialise les données de la liste de tournois. 
     private void initData() {
         lsTournois.add(new Tournoi("Tournoi 1"));
+        lsTournois.get(0).addMatch(new Joueur("Remy"), new Joueur("Matilde"), Resultats.GAIN_JOUEUR1);
+        lsTournois.get(0).addMatch(new Joueur("Papy Denis"), new Joueur("Remy"), Resultats.GAIN_JOUEUR1);
+        lsTournois.get(0).addJoueur("Albert");
         lsTournois.add(new Tournoi("Tournoi 2"));
         lsTournois.add(new Tournoi("Tournoi 3"));
+    }
+    public void addMatch(Joueur j1,Joueur j2,Match.Resultats r){
+        lsTournois.get(numLineSelected).addMatch(j1,j2,r);
+        notif(TypeNotif.ADD_MATCH);
     }
 }
