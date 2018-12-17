@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Observable;
 
 public class Match extends Observable {
-    
+
     private int numMatchSelected = -1;
     private final List<Match> lsMatch = new ArrayList();
 
@@ -65,12 +65,15 @@ public class Match extends Observable {
         return true;
     }
 
-    public void selectMatch(int index){
+    public void selectMatch(int index) {
         numMatchSelected = index;
     }
-    
-    public Match getSelectedMatch(){
-        return lsMatch.get(numMatchSelected);
+
+    public Match getSelectedMatch() {
+        if (numMatchSelected >= 0 && numMatchSelected < lsMatch.size()) {
+            return lsMatch.get(numMatchSelected);
+        }
+        return null;
     }
 
     public void deleteMatch(Match m) {

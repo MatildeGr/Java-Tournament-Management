@@ -57,11 +57,7 @@ public class View implements Observer {
     public View(Stage primaryStage, Ctrl ctrl) {
         this.ctrl = ctrl;
         configScene();
-        configSelectionLine();
-        configSelectionComboBox1();
-        configSelectionComboBox2();
-        configListenerEditLine();
-        configSelectionMatch();
+        action();
         Scene scene = new Scene(root, 1000, 700);
         primaryStage.setTitle("Gestion des tournois");
         primaryStage.setScene(scene);
@@ -102,11 +98,6 @@ public class View implements Observer {
             final Match m = param.getValue();
             return new SimpleObjectProperty<>(m.getResultats());
         });
-//        final TableColumn<Match, Button> del = new TableColumn<>("Action");
-//        del.setCellValueFactory(p -> {
-//            final Match m = p.getValue();
-//            return new SimpleObjectProperty<>(m.getButton());
-//        });
 
         joueur1.setSortable(false);
         joueur2.setSortable(false);
@@ -114,13 +105,12 @@ public class View implements Observer {
         joueur1.setPrefWidth(TABLEWIDTH);
         joueur2.setPrefWidth(TABLEWIDTH);
         resultat.setPrefWidth(TABLEWIDTH * 1.25);
-//        del.setPrefWidth(TABLEWIDTH * 1.25);
         lvMatch.getColumns().addAll(joueur1, joueur2, resultat);
         match.setSpacing(SPACING);
         lbMatch.setText("Matchs");
         lvMatch.setPrefWidth(TEXTSIZE);
         delete.setText("Delete");
-        match.getChildren().addAll(lbMatch, lvMatch,delete, upd);
+        match.getChildren().addAll(lbMatch, lvMatch, delete, upd);
 
     }
 
@@ -172,18 +162,26 @@ public class View implements Observer {
         return lvMatch.getSelectionModel();
     }
 
+    private void action() {
+        configSelectionLine();
+        configSelectionMatch();
+        configSelectionComboBox1();
+        configSelectionComboBox2();
+        configListenerEditLine();
+        delete();
+    }
+
     private void configSelectionLine() {
         getListViewTournoi().selectedIndexProperty().addListener(o -> {
             ctrl.lineSelection(getListViewTournoi().getSelectedIndex());
         });
     }
-    
-    private void configSelectionMatch(){
+
+    private void configSelectionMatch() {
         getListViewMatch().selectedIndexProperty().addListener(o -> {
             ctrl.selectMatch(getListViewMatch().getSelectedIndex());
         });
     }
-    
 
     private void configSelectionComboBox1() {
         cbJ1.getSelectionModel().selectedIndexProperty().addListener(
@@ -201,6 +199,9 @@ public class View implements Observer {
                 ctrl.addMatch(cbJ1.getValue(), cbJ2.getValue(), cbRes.getValue());
             }
         });
+
+    }
+    private void delete(){
         delete.setOnAction(e -> {
             ctrl.deleteMatch(lvMatch.getSelectionModel().getSelectedItem());
         });
@@ -218,16 +219,16 @@ public class View implements Observer {
         TypeNotif typeNotif = (TypeNotif) o1;
         switch (typeNotif) {
             case INIT:
-                lvTournoi.getItems().setAll(lstournois.getLines());
+                lvTournoi.getItems().setAll(ctrl.getLines());
                 break;
             case LINE_TOURNOI_SELECTED:
-                lvInscrit.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
-                lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
-                cbJ1.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
+                lvInscrit.getItems().setAll(ctrl.getAllInscrit(lstournois.getNumLineSelected()));
+                lvMatch.getItems().setAll(ctrl.getAllMatch(lstournois.getNumLineSelected()));
+                cbJ1.getItems().setAll(ctrl.getAllInscrit(lstournois.getNumLineSelected()));
                 break;
             case CB1_SELECTED:
                 cbJ2.getItems().setAll();
-                cbJ2.getItems().setAll(lstournois.getAdversaire());
+                cbJ2.getItems().setAll(ctrl.getAdversaire());
                 cbRes.getItems().setAll();
                 break;
             case CB2_SELECTED:
@@ -235,12 +236,12 @@ public class View implements Observer {
                 cbRes.getItems().setAll(EnumSet.allOf(Match.Resultats.class));
                 break;
             case ADD_MATCH:
-                lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
+                lvMatch.getItems().setAll(ctrl.getAllMatch(lstournois.getNumLineSelected()));
                 reset_combobox();
-                cbJ1.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
+                cbJ1.getItems().setAll(ctrl.getAllInscrit(lstournois.getNumLineSelected()));
                 break;
             case DELETE_MATCH:
-                lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
+                lvMatch.getItems().setAll(ctrl.getAllMatch(lstournois.getNumLineSelected()));
                 break;
 //            case LINE_MATCH_SELECTED:
 //                cbJ1.getItems().setAll(lstournois.getSelectedMatch().getJoueur1());

@@ -1,8 +1,10 @@
 package ctrl;
 
+import java.util.List;
 import model.Joueur;
 import model.ListeTournois;
 import model.Match;
+import model.Tournoi;
 
 public class Ctrl {
 
@@ -44,6 +46,22 @@ public class Ctrl {
 
     public Match getSelectMatch() {
         return lstournois.getSelectedMatch();
+    }
+
+    public List<Joueur> getAllInscrit(int numLineSelected) {
+        return lstournois.getAllInscrit(numLineSelected);
+    }
+
+    public List<Match> getAllMatch(int numLineSelected) {
+        return lstournois.getAllMatch(numLineSelected);
+    }
+
+    public List<Joueur> getAdversaire() {
+        return lstournois.getAdversaire();
+    }
+
+    public List<Tournoi> getLines() {
+        return lstournois.getLines();
     }
 
 }

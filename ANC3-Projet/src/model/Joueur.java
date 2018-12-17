@@ -26,7 +26,10 @@ public class Joueur extends Observable {
     }
 
     public Joueur getJoueur(int pos) {
-        return lsinscrits.get(pos);
+        if(pos >= 0 && pos < lsinscrits.size()){
+            return lsinscrits.get(pos);
+        }
+        return null;
     }
 
     public void addJoueur(String nom) {
