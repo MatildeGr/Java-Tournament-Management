@@ -18,11 +18,9 @@ public class Match extends Observable {
     private Resultats res;
     private Button button;
 
-    //Constructeur de} Match. 
     public Match() {
     }
 
-    //Constructeur de Match avec deux joueurs et un résultat. 
     public Match(Joueur j1, Joueur j2, Resultats r) {
         if (valideMatch(j1, j2)) {
             this.joueur1 = j1;
@@ -30,31 +28,6 @@ public class Match extends Observable {
             this.res = r;
             this.button = new Button("Supprimer");
         }
-    }
-
-    private boolean valideMatch(Joueur j1, Joueur j2) {
-        for (Match m : lsMatch) {
-            if (j1.equals(m.joueur1) && j2.equals(m.joueur2)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void addMatch(Joueur j1, Joueur j2, Resultats r) {
-        lsMatch.add(new Match(j1, j2, r));
-    }
-
-    public Button getButton() {
-        return button;
-    }
-
-    public void deleteMatch(Match m) {
-        lsMatch.remove(m);
-    }
-
-    public Match getMatch() {
-        return new Match(joueur1, joueur2, res);
     }
 
     public Joueur getJoueur1() {
@@ -75,6 +48,31 @@ public class Match extends Observable {
 
     public int getSize() {
         return lsMatch.size();
+    }
+
+    public Match getMatch() {
+        return new Match(joueur1, joueur2, res);
+    }
+
+    public void addMatch(Joueur j1, Joueur j2, Resultats r) {
+        lsMatch.add(new Match(j1, j2, r));
+    }
+
+    private boolean valideMatch(Joueur j1, Joueur j2) {
+        for (Match m : lsMatch) {
+            if (j1.equals(m.joueur1) && j2.equals(m.joueur2)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Button getButton() {
+        return button;
+    }
+
+    public void deleteMatch(Match m) {
+        lsMatch.remove(m);
     }
 
 }

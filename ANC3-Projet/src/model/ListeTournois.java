@@ -3,69 +3,39 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import static model.Joueur.getListToString;
 import model.Match.Resultats;
 
 public class ListeTournois extends Observable {
 
-    private final List<Tournoi> lsTournois = new ArrayList();
     private int numLineSelected = -1;
+    private final List<Tournoi> lsTournois = new ArrayList();
 
-    //Constructeur de ListeTournois.
+
+    /**
+     *
+     * TOURNAMENTS LIST FUNCTIONS
+     *
+     */
     public ListeTournois() {
         initData();
+    }
+
+    public List<Tournoi> getTournament() {
+        return this.lsTournois;
     }
 
     public List<Tournoi> getLines() {
         return lsTournois;
     }
 
-    //Fonction qui renvoie la liste des joueurs inscrits d'un tournoi à une ligne sélectionnée.
-    public List<Joueur> getAllInscrit(int numLineSelected) {
-        return lsTournois.get(numLineSelected).getAllInscrit();
-    }
-
-    public List<Match> getAllMatch(int nulLineSelected) {
-        return lsTournois.get(numLineSelected).getAllMatch();
-    }
-
-    //Fonction qui renvoie une liste de String de tous les joueurs d'un tournoi à une ligne sélectionnée.
-    public List<String> getAllJoueurToString(int numLineSelected) {
-        return getListToString(getAllInscrit(numLineSelected));
-    }
-
-    //Getteur qui renvoie la liste de tournoi.
-    public List<Tournoi> getTournament() {
-        return this.lsTournois;
+    //Fonction qui renvoie le nombre de ligne de la liste de tournois.
+    public int nbLines() {
+        return lsTournois.size();
     }
 
     //Fonction renvoie le numéro de la ligne sélectionnée.
     public int getNumLineSelected() {
         return this.numLineSelected;
-    }
-
-    //Fonction qui renvoie le nombre de ligne de la liste de tournois.
-    public int nbLines() {
-        return lsTournois.size();
-    }
-    
-    public int matchSize(){
-         return lsTournois.get(numLineSelected).matchSize();
-    }
-    
-    public int joueurSize(){
-        return lsTournois.get(numLineSelected).joueurSize();
-    }
-    
-    public void selectJoueurs(int joueur){
-        lsTournois.get(numLineSelected).selectJoueur(joueur);
-        notif(TypeNotif.CB1_SELECTED);
-    }
-    public void selectJoueur2(){
-        notif(TypeNotif.CB2_SELECTED);
-    }
-    public List<Joueur> getAdversaire(){
-        return lsTournois.get(numLineSelected).adversaire();
     }
 
     //Fonction qui modifie le numéro de la ligne sélectionnée et qui change le type de notif. 
@@ -86,6 +56,66 @@ public class ListeTournois extends Observable {
         notifyObservers(typeNotif);
     }
 
+    /**
+     *
+     * PLAYER LIST FUNCTIONS
+     *
+     */
+    public List<Joueur> getAllInscrit(int numLineSelected) {
+        return lsTournois.get(numLineSelected).getAllInscrit();
+    }
+
+    public int joueurSize() {
+        return lsTournois.get(numLineSelected).joueurSize();
+    }
+
+    public void selectJoueurs(int joueur) {
+        lsTournois.get(numLineSelected).selectJoueur(joueur);
+        notif(TypeNotif.CB1_SELECTED);
+    }
+
+    public void selectJoueur2() {
+        notif(TypeNotif.CB2_SELECTED);
+    }
+
+    /**
+     *
+     * MATCH LIST FUNCTIONS
+     *
+     */
+    public List<Match> getAllMatch(int nulLineSelected) {
+        return lsTournois.get(numLineSelected).getAllMatch();
+    }
+
+    public int matchSize() {
+        return lsTournois.get(numLineSelected).matchSize();
+    }
+
+    public List<Joueur> getAdversaire() {
+        return lsTournois.get(numLineSelected).adversaire();
+    }
+
+    public void addMatch(Joueur j1, Joueur j2, Match.Resultats r) {
+        lsTournois.get(numLineSelected).addMatch(j1, j2, r);
+        notif(TypeNotif.ADD_MATCH);
+    }
+
+    public void deleteMatch(Match m) {
+        lsTournois.get(numLineSelected).deleteMatch(m);
+        notif(TypeNotif.DELETE_MATCH);
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //Fonction qui initialise les données de la liste de tournois. 
     private void initData() {
         lsTournois.add(new Tournoi("Tournoi 1"));
@@ -95,12 +125,5 @@ public class ListeTournois extends Observable {
         lsTournois.add(new Tournoi("Tournoi 2"));
         lsTournois.add(new Tournoi("Tournoi 3"));
     }
-    public void addMatch(Joueur j1,Joueur j2,Match.Resultats r){
-        lsTournois.get(numLineSelected).addMatch(j1,j2,r);
-        notif(TypeNotif.ADD_MATCH);
-    }
-    public void deleteMatch(Match m){
-     lsTournois.get(numLineSelected).deleteMatch(m);
-     notif(TypeNotif.DELETE_MATCH);
-    }
+
 }
