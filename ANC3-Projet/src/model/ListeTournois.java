@@ -99,4 +99,8 @@ public class ListeTournois extends Observable {
         lsTournois.get(numLineSelected).addMatch(j1,j2,r);
         notif(TypeNotif.ADD_MATCH);
     }
+    public void deleteMatch(Match m){
+     lsTournois.get(numLineSelected).deleteMatch(m);
+     notif(TypeNotif.DELETE_MATCH);
+    }
 }

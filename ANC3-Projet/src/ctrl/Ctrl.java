@@ -25,11 +25,17 @@ public class Ctrl {
             lstournois.selectJoueurs(joueur);
         }
     }
+
     public void cb2Selection() {
         lstournois.selectJoueur2();
     }
-    public void addMatch(Joueur j1,Joueur j2,Match.Resultats r){
-        lstournois.addMatch(j1,j2,r);
+
+    public void addMatch(Joueur j1, Joueur j2, Match.Resultats r) {
+        lstournois.addMatch(j1, j2, r);
+    }
+
+    public void deleteMatch(Match m) {
+        lstournois.deleteMatch(m);
     }
 
 }

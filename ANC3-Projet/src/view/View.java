@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,12 +13,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionModel;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.Joueur;
 import model.ListeTournois;
 import model.Match;
@@ -49,6 +52,7 @@ public class View implements Observer {
     private final ComboBox<Joueur> cbJ2 = new ComboBox();
     private final ComboBox<Resultats> cbRes = new ComboBox();
     private final Button add = new Button();
+    private final Button delete = new Button();
 
     private final Ctrl ctrl;
 
@@ -100,13 +104,20 @@ public class View implements Observer {
             final Match m = param.getValue();
             return new SimpleObjectProperty<>(m.getResultats());
         });
+        final TableColumn<Match, Button> del = new TableColumn<>("Action");
+        del.setCellValueFactory(p -> {
+            final Match m = p.getValue();
+            return new SimpleObjectProperty<>(m.getButton());
+        });
+
         joueur1.setSortable(false);
         joueur2.setSortable(false);
         resultat.setSortable(false);
         joueur1.setPrefWidth(TABLEWIDTH);
         joueur2.setPrefWidth(TABLEWIDTH);
         resultat.setPrefWidth(TABLEWIDTH * 1.25);
-        lvMatch.getColumns().addAll(joueur1, joueur2, resultat);
+        del.setPrefWidth(TABLEWIDTH * 1.25);
+        lvMatch.getColumns().addAll(joueur1, joueur2, resultat, del);
         match.setSpacing(SPACING);
         lbMatch.setText("Matchs");
         lvMatch.setPrefWidth(TEXTSIZE);
@@ -158,6 +169,10 @@ public class View implements Observer {
         return lvTournoi.getSelectionModel();
     }
 
+    private SelectionModel<Match> getListViewMatch() {
+        return lvMatch.getSelectionModel();
+    }
+
     private void configSelectionLine() {
         getListViewTournoi().selectedIndexProperty().addListener(o -> {
             ctrl.lineSelection(getListViewTournoi().getSelectedIndex());
@@ -173,18 +188,23 @@ public class View implements Observer {
         cbJ2.getSelectionModel().selectedIndexProperty().addListener(
                 observable -> ctrl.cb2Selection());
     }
-      private void configListenerEditLine() {
+
+    private void configListenerEditLine() {
         add.setOnAction(e -> {
             if (cbJ1.getValue() != null && cbJ2.getValue() != null && cbRes.getValue() != null) {
-                ctrl.addMatch(cbJ1.getValue(),cbJ2.getValue(),cbRes.getValue());
+                ctrl.addMatch(cbJ1.getValue(), cbJ2.getValue(), cbRes.getValue());
             }
         });
+        delete.setOnAction(e -> {
+            ctrl.deleteMatch(lvMatch.getSelectionModel().getSelectedItem());
+        });
     }
-      private void reset_combobox(){
-          cbJ1.getItems().setAll();
-          cbJ2.getItems().setAll();
-          cbRes.getItems().setAll();
-      }
+
+    private void reset_combobox() {
+        cbJ1.getItems().setAll();
+        cbJ2.getItems().setAll();
+        cbRes.getItems().setAll();
+    }
 
     @Override
     public void update(Observable o, Object o1) {
@@ -206,14 +226,17 @@ public class View implements Observer {
                 break;
             case CB2_SELECTED:
                 cbRes.getItems().setAll();
-                cbRes.getItems().setAll(EnumSet.allOf( Match.Resultats.class ));
+                cbRes.getItems().setAll(EnumSet.allOf(Match.Resultats.class));
                 break;
-                case ADD_MATCH:
+            case ADD_MATCH:
                 lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
                 reset_combobox();
                 cbJ1.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
                 break;
-
+            case DELETE_MATCH:
+                lvMatch.getItems().remove(lstournois.getNumLineSelected());//JE SUIS PERDUE ICI HELLP REMY
+                lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
+                break;
         }
 
     }
