@@ -38,4 +38,12 @@ public class Ctrl {
         lstournois.deleteMatch(m);
     }
 
+    public void selectMatch(int index) {
+        lstournois.selectMatch(index);
+    }
+
+    public Match getSelectMatch() {
+        return lstournois.getSelectedMatch();
+    }
+
 }

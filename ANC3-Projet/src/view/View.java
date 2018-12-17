@@ -61,6 +61,7 @@ public class View implements Observer {
         configSelectionComboBox1();
         configSelectionComboBox2();
         configListenerEditLine();
+        configSelectionMatch();
         Scene scene = new Scene(root, 1000, 700);
         primaryStage.setTitle("Gestion des tournois");
         primaryStage.setScene(scene);
@@ -101,11 +102,11 @@ public class View implements Observer {
             final Match m = param.getValue();
             return new SimpleObjectProperty<>(m.getResultats());
         });
-        final TableColumn<Match, Button> del = new TableColumn<>("Action");
-        del.setCellValueFactory(p -> {
-            final Match m = p.getValue();
-            return new SimpleObjectProperty<>(m.getButton());
-        });
+//        final TableColumn<Match, Button> del = new TableColumn<>("Action");
+//        del.setCellValueFactory(p -> {
+//            final Match m = p.getValue();
+//            return new SimpleObjectProperty<>(m.getButton());
+//        });
 
         joueur1.setSortable(false);
         joueur2.setSortable(false);
@@ -113,12 +114,13 @@ public class View implements Observer {
         joueur1.setPrefWidth(TABLEWIDTH);
         joueur2.setPrefWidth(TABLEWIDTH);
         resultat.setPrefWidth(TABLEWIDTH * 1.25);
-        del.setPrefWidth(TABLEWIDTH * 1.25);
-        lvMatch.getColumns().addAll(joueur1, joueur2, resultat, del);
+//        del.setPrefWidth(TABLEWIDTH * 1.25);
+        lvMatch.getColumns().addAll(joueur1, joueur2, resultat);
         match.setSpacing(SPACING);
         lbMatch.setText("Matchs");
         lvMatch.setPrefWidth(TEXTSIZE);
-        match.getChildren().addAll(lbMatch, lvMatch, upd);
+        delete.setText("Delete");
+        match.getChildren().addAll(lbMatch, lvMatch,delete, upd);
 
     }
 
@@ -175,6 +177,13 @@ public class View implements Observer {
             ctrl.lineSelection(getListViewTournoi().getSelectedIndex());
         });
     }
+    
+    private void configSelectionMatch(){
+        getListViewMatch().selectedIndexProperty().addListener(o -> {
+            ctrl.selectMatch(getListViewMatch().getSelectedIndex());
+        });
+    }
+    
 
     private void configSelectionComboBox1() {
         cbJ1.getSelectionModel().selectedIndexProperty().addListener(
@@ -231,9 +240,11 @@ public class View implements Observer {
                 cbJ1.getItems().setAll(lstournois.getAllInscrit(lstournois.getNumLineSelected()));
                 break;
             case DELETE_MATCH:
-                lvMatch.getItems().remove(lstournois.getNumLineSelected());//JE SUIS PERDUE ICI HELLP REMY
                 lvMatch.getItems().setAll(lstournois.getAllMatch(lstournois.getNumLineSelected()));
                 break;
+//            case LINE_MATCH_SELECTED:
+//                cbJ1.getItems().setAll(lstournois.getSelectedMatch().getJoueur1());
+//                break;
         }
 
     }

@@ -3,10 +3,10 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import javafx.scene.control.Button;
 
 public class Match extends Observable {
-
+    
+    private int numMatchSelected = -1;
     private final List<Match> lsMatch = new ArrayList();
 
     public enum Resultats {
@@ -16,7 +16,6 @@ public class Match extends Observable {
     private Joueur joueur1;
     private Joueur joueur2;
     private Resultats res;
-    private Button button;
 
     public Match() {
     }
@@ -26,7 +25,6 @@ public class Match extends Observable {
             this.joueur1 = j1;
             this.joueur2 = j2;
             this.res = r;
-            this.button = new Button("Supprimer");
         }
     }
 
@@ -67,8 +65,12 @@ public class Match extends Observable {
         return true;
     }
 
-    public Button getButton() {
-        return button;
+    public void selectMatch(int index){
+        numMatchSelected = index;
+    }
+    
+    public Match getSelectedMatch(){
+        return lsMatch.get(numMatchSelected);
     }
 
     public void deleteMatch(Match m) {

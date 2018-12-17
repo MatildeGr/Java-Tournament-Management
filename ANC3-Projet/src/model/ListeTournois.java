@@ -104,6 +104,14 @@ public class ListeTournois extends Observable {
         lsTournois.get(numLineSelected).deleteMatch(m);
         notif(TypeNotif.DELETE_MATCH);
     }
+    public void selectMatch(int index){
+        lsTournois.get(numLineSelected).selectMatch(index);
+        notif(TypeNotif.LINE_MATCH_SELECTED);
+    }
+    
+      public Match getSelectedMatch(){
+       return lsTournois.get(numLineSelected).getSelectedMatch();
+    }
 
     
     

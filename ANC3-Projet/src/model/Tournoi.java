@@ -93,5 +93,11 @@ public class Tournoi extends Observable {
         lsmatchs.deleteMatch(m);
         return true;
     }
+    public void selectMatch(int index){
+        lsmatchs.selectMatch(index);
+    }
+    public Match getSelectedMatch(){
+       return lsmatchs.getSelectedMatch();
+    }
 
 }
