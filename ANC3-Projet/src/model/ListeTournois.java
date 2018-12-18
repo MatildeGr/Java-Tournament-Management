@@ -43,12 +43,12 @@ public class ListeTournois extends Observable {
         numLineSelected = index;
         notif(TypeNotif.LINE_TOURNOI_SELECTED);
     }
-
-    //Fonction qui remet à -1 le numéro de la ligne et qui change le type de notif.
-    public void unselect() {
+    
+    public void unselectTournoi() {
         numLineSelected = -1;
-        notif(TypeNotif.LINE_UNSELECTED);
+        notif(TypeNotif.TOURNOI_UNSELECTED);
     }
+
 
     //Fonction qui change le type de notif. 
     public void notif(TypeNotif typeNotif) {
@@ -99,6 +99,10 @@ public class ListeTournois extends Observable {
         lsTournois.get(numLineSelected).addMatch(j1, j2, r);
         notif(TypeNotif.ADD_MATCH);
     }
+    public void updMatch(Joueur j1, Joueur j2, Resultats r) {
+        lsTournois.get(numLineSelected).updMatch(j1,j2,r);
+        notif(TypeNotif.LINE_UPDATED);   
+    }
 
     public void deleteMatch(Match m) {
         lsTournois.get(numLineSelected).deleteMatch(m);
@@ -112,6 +116,10 @@ public class ListeTournois extends Observable {
       public Match getSelectedMatch(){
        return lsTournois.get(numLineSelected).getSelectedMatch();
     }
+      public void unselectMatch(){
+          lsTournois.get(numLineSelected).unselectMatch();
+          notif(TypeNotif.MATCH_UNSELECTED);
+      }
 
     
     

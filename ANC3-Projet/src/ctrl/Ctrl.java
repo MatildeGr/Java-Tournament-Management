@@ -4,6 +4,7 @@ import java.util.List;
 import model.Joueur;
 import model.ListeTournois;
 import model.Match;
+import model.Match.Resultats;
 import model.Tournoi;
 
 public class Ctrl {
@@ -18,8 +19,12 @@ public class Ctrl {
         if (numLine >= 0 && numLine < lstournois.nbLines()) {
             lstournois.select(numLine);
         } else {
-            lstournois.unselect();
+            lstournois.unselectTournoi();
         }
+    }
+
+    public int getNumLineSelected() {
+        return lstournois.getNumLineSelected();
     }
 
     public void cb1Selection(int joueur) {
@@ -32,8 +37,12 @@ public class Ctrl {
         lstournois.selectJoueur2();
     }
 
-    public void addMatch(Joueur j1, Joueur j2, Match.Resultats r) {
+    public void addMatch(Joueur j1, Joueur j2, Resultats r) {
         lstournois.addMatch(j1, j2, r);
+    }
+
+    public void updMatch(Joueur j1, Joueur j2, Resultats r) {
+        lstournois.updMatch(j1, j2, r);
     }
 
     public void deleteMatch(Match m) {
@@ -41,7 +50,11 @@ public class Ctrl {
     }
 
     public void selectMatch(int index) {
-        lstournois.selectMatch(index);
+        if (index >= 0 && index < lstournois.matchSize()) {
+            lstournois.selectMatch(index);
+        } else {
+            lstournois.unselectMatch();
+        }
     }
 
     public Match getSelectMatch() {
@@ -62,6 +75,10 @@ public class Ctrl {
 
     public List<Tournoi> getLines() {
         return lstournois.getLines();
+    }
+
+    public void unselectMatch() {
+        lstournois.unselectMatch();
     }
 
 }

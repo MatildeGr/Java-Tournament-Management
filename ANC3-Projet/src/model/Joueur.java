@@ -26,7 +26,7 @@ public class Joueur extends Observable {
     }
 
     public Joueur getJoueur(int pos) {
-        if(pos >= 0 && pos < lsinscrits.size()){
+        if (pos >= 0 && pos < lsinscrits.size()) {
             return lsinscrits.get(pos);
         }
         return null;
@@ -40,6 +40,10 @@ public class Joueur extends Observable {
         JOUEUR_SELECTED = joueur;
     }
 
+    public void unselectJoueur() {
+        JOUEUR_SELECTED = -1;
+    }
+
     public int getSize() {
         return lsinscrits.size();
     }
@@ -51,7 +55,7 @@ public class Joueur extends Observable {
 
     //retourne joueur selected si hors borne return null
     public Joueur JoueurSelected() {
-        if(JOUEUR_SELECTED >=0 && JOUEUR_SELECTED < lsinscrits.size()){
+        if (JOUEUR_SELECTED >= 0 && JOUEUR_SELECTED < lsinscrits.size()) {
             return lsinscrits.get(JOUEUR_SELECTED);
         }
         return null;
@@ -93,10 +97,8 @@ public class Joueur extends Observable {
         hash = 37 * hash + Objects.hashCode(this.name);
         return hash;
     }
-    
-    
-    //Fonction qui initialiste les données des joueurs. 
 
+    //Fonction qui initialiste les données des joueurs. 
     private void initData() {
         lsinscrits.add(new Joueur("Matilde"));
         lsinscrits.add(new Joueur("Remy"));

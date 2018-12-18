@@ -88,6 +88,9 @@ public class Tournoi extends Observable {
         lsmatchs.addMatch(j1, j2, r);
         return true;
     }
+    public void updMatch(Joueur j1, Joueur j2, Resultats r) {
+        lsmatchs.updMatch(j1,j2,r);
+    }
 
     public boolean deleteMatch(Match m) {
         lsmatchs.deleteMatch(m);
@@ -98,6 +101,9 @@ public class Tournoi extends Observable {
     }
     public Match getSelectedMatch(){
        return lsmatchs.getSelectedMatch();
+    }
+    public void unselectMatch(){
+        lsmatchs.unselectMatch();
     }
 
 }
