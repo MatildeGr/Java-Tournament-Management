@@ -13,7 +13,6 @@ public class Joueur extends Observable {
     private String name;
 
     public Joueur() {
-        initData();
     }
 
     public Joueur(String name) {
@@ -98,13 +97,5 @@ public class Joueur extends Observable {
         return hash;
     }
 
-    //Fonction qui initialiste les données des joueurs. 
-    private void initData() {
-        lsinscrits.add(new Joueur("Matilde"));
-        lsinscrits.add(new Joueur("Remy"));
-        lsinscrits.add(new Joueur("Papy Denis"));
-        lsinscrits.add(new Joueur("Jean"));
-        lsinscrits.add(new Joueur("Heude"));
-    }
 
 }
