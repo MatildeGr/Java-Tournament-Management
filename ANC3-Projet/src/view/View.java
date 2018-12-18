@@ -283,19 +283,18 @@ public class View implements Observer {
             case CB1_SELECTED:
                 cbJ2.getItems().setAll();
                 cbJ2.getItems().setAll(ctrl.getAdversaire());
-                cbRes.getItems().setAll();
                 break;
             case CB2_SELECTED:
                 cbRes.getItems().setAll();
                 cbRes.getItems().setAll(EnumSet.allOf(Match.Resultats.class));
                 break;
             case ADD_MATCH:
-                lvMatch.getItems().setAll(ctrl.getAllMatch(lstournois.getNumLineSelected()));
+                lvMatch.getItems().setAll(ctrl.getAllMatch(ctrl.getNumLineSelected()));
                 reset_combobox();
                 break;
             case DELETE_MATCH:
                 reset_value_combobox();
-                lvMatch.getItems().setAll(ctrl.getAllMatch(lstournois.getNumLineSelected()));
+                lvMatch.getItems().setAll(ctrl.getAllMatch(ctrl.getNumLineSelected()));
                 ctrl.unselectMatch();
                 setButonDelUpd(true);
                 break;
@@ -312,7 +311,7 @@ public class View implements Observer {
                 reset_combobox();
                 add.setDisable(false);
                 setButonDelUpd(true);
-                lvMatch.getItems().setAll(ctrl.getAllMatch(lstournois.getNumLineSelected()));
+                lvMatch.getItems().setAll(ctrl.getAllMatch(ctrl.getNumLineSelected()));
                 break;
         }
 
