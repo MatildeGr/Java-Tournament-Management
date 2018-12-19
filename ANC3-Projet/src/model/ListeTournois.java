@@ -80,10 +80,15 @@ public class ListeTournois extends Observable {
         }
 
     }
+    public void selectJoueur2(int joueur) {
+        if (numLineSelected >= 0 && numLineSelected < lsTournois.size()) {
+            lsTournois.get(numLineSelected).selectJoueur2(joueur);
+            notif(TypeNotif.CB2_SELECTED);
+        }
 
-    public void selectJoueur2() {
-        notif(TypeNotif.CB2_SELECTED);
     }
+
+
 
     /**
      *
@@ -110,29 +115,43 @@ public class ListeTournois extends Observable {
         }
         return null;
     }
-
-    public void addMatch(Joueur j1, Joueur j2, Match.Resultats r) {
+    
+    public List<Joueur> getAdversaire2() {
         if (numLineSelected >= 0 && numLineSelected < lsTournois.size()) {
-            lsTournois.get(numLineSelected).addMatch(j1, j2, r);
-            notif(TypeNotif.ADD_MATCH);
+            return lsTournois.get(numLineSelected).adversaire2();
         }
-
+        return null;
     }
 
-    public void updMatch(Joueur j1, Joueur j2, Resultats r) {
+    public boolean addMatch(Joueur j1, Joueur j2, Match.Resultats r) {
         if (numLineSelected >= 0 && numLineSelected < lsTournois.size()) {
-            lsTournois.get(numLineSelected).updMatch(j1, j2, r);
-            notif(TypeNotif.LINE_UPDATED);
-        }
+            if (lsTournois.get(numLineSelected).addMatch(j1, j2, r)) {
+                notif(TypeNotif.ADD_MATCH);
+                return true;
+            }
 
+        }
+        return false;
     }
 
-    public void deleteMatch(Match m) {
+    public boolean updMatch(Joueur j1, Joueur j2, Resultats r) {
         if (numLineSelected >= 0 && numLineSelected < lsTournois.size()) {
-            lsTournois.get(numLineSelected).deleteMatch(m);
-            notif(TypeNotif.DELETE_MATCH);
+            if (lsTournois.get(numLineSelected).updMatch(j1, j2, r)) {
+                notif(TypeNotif.LINE_UPDATED);
+                return true;
+            }
         }
+        return false;
+    }
 
+    public boolean deleteMatch(Match m) {
+        if (numLineSelected >= 0 && numLineSelected < lsTournois.size()) {
+            if (lsTournois.get(numLineSelected).deleteMatch(m)) {
+                notif(TypeNotif.DELETE_MATCH);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void selectMatch(int index) {
@@ -155,6 +174,9 @@ public class ListeTournois extends Observable {
             notif(TypeNotif.MATCH_UNSELECTED);
         }
     }
+    public List<Joueur> advJoueurSelect(){
+        return lsTournois.get(numLineSelected).advJoueurSelect();
+    }
 
     //Fonction qui initialise les données de la liste de tournois. 
     private void initData() {
@@ -162,10 +184,10 @@ public class ListeTournois extends Observable {
             "Manon", "Hugo", "Alice", "Léo", "Lina", "Raphaël", "Léa"};
 
         lsTournois.add(new Tournoi("Tournoi 1"));
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 10; i++) {
             lsTournois.get(0).addJoueur(nom[i]);
         }
-        for (int i = 0; i < 16; i += 2) {
+        for (int i = 0; i < 10; i += 2) {
             lsTournois.get(0).addMatch(new Joueur(nom[i]), new Joueur(nom[i + 1]), Resultats.MATCH_NULL);
         }
         lsTournois.add(new Tournoi("Tournoi 2"));

@@ -174,7 +174,7 @@ public class View implements Observer {
         configSelectionMatch();
         configSelectionComboBox1();
         configSelectionComboBox2();
-        configSelectionComboBoxRes();
+//       configSelectionComboBoxRes();
         configListenerEditLine();
         delete();
         configUpdate();
@@ -196,17 +196,17 @@ public class View implements Observer {
         cbJ1.getSelectionModel().selectedIndexProperty().addListener(
                 observable -> ctrl.cb1Selection(cbJ1.getSelectionModel().getSelectedIndex()));
     }
+//modif 
 
     private void configSelectionComboBox2() {
         cbJ2.getSelectionModel().selectedIndexProperty().addListener(
-                observable -> ctrl.cb2Selection());
+                observable -> ctrl.cb2Selection(cbJ2.getSelectionModel().getSelectedIndex()));
     }
 
-    private void configSelectionComboBoxRes() {
-        cbRes.getSelectionModel().selectedIndexProperty().addListener(
-                observable -> add.setDisable(false));
-    }
-
+//    private void configSelectionComboBoxRes() {
+//        cbRes.getSelectionModel().selectedIndexProperty().addListener(
+//                observable -> add.setDisable(false));
+//    }
     private void configListenerEditLine() {
         add.setOnAction(e -> {
             if (cbJ1.getValue() != null && cbJ2.getValue() != null && cbRes.getValue() != null) {
@@ -243,7 +243,6 @@ public class View implements Observer {
         cbJ1.getItems().setAll();
         cbJ2.getItems().setAll();
         cbRes.getItems().setAll();
-        cbJ1.getItems().setAll(ctrl.getAllInscrit(ctrl.getNumLineSelected()));
     }
 
     private void reset_value_combobox() {
@@ -262,6 +261,11 @@ public class View implements Observer {
         delete.setDisable(b);
         update.setDisable(b);
     }
+//    private void test(){
+//        if(cbJ2.getValue() != null && cbJ2.getValue() == null){
+//            cbJ1.getItems().setAll(Tournoi.adversairev2(cbJ2.getValue()));
+//        }
+//    }
 
     @Override
     public void update(Observable o, Object o1) {
@@ -273,16 +277,17 @@ public class View implements Observer {
                 lvTournoi.getItems().setAll(ctrl.getLines());
                 break;
             case LINE_TOURNOI_SELECTED:
-                reset_value_combobox();
-                reset_combobox();
-                setButonDelUpd(true);
-                add.setDisable(false);
                 lvInscrit.getItems().setAll(ctrl.getAllInscrit(lstournois.getNumLineSelected()));
                 lvMatch.getItems().setAll(ctrl.getAllMatch(lstournois.getNumLineSelected()));
+                reset_value_combobox();
+                reset_combobox();
+                cbJ1.getItems().setAll(ctrl.getAllInscrit(ctrl.getNumLineSelected()));
+                setButonDelUpd(true);
+                add.setDisable(false);
                 break;
             case CB1_SELECTED:
                 cbJ2.getItems().setAll();
-                cbJ2.getItems().setAll(ctrl.getAdversaire());
+                cbJ2.getItems().setAll(ctrl.advJoueurSelect());
                 break;
             case CB2_SELECTED:
                 cbRes.getItems().setAll();
@@ -291,43 +296,45 @@ public class View implements Observer {
             case ADD_MATCH:
                 lvMatch.getItems().setAll(ctrl.getAllMatch(ctrl.getNumLineSelected()));
                 reset_combobox();
+                reset_value_combobox();
+                cbJ1.getItems().setAll(ctrl.getAllInscrit(ctrl.getNumLineSelected()));
                 break;
             case DELETE_MATCH:
-                reset_value_combobox();
                 lvMatch.getItems().setAll(ctrl.getAllMatch(ctrl.getNumLineSelected()));
+                reset_value_combobox();
+                reset_combobox();
                 ctrl.unselectMatch();
                 setButonDelUpd(true);
                 break;
             case LINE_MATCH_SELECTED:
                 cbJ1.setValue(ctrl.getSelectMatch().getJoueur1());
                 cbJ2.setValue(ctrl.getSelectMatch().getJoueur2());
+                cbJ1.getItems().setAll(ctrl.getAdversaire2());
+                cbJ2.getItems().setAll(ctrl.getAdversaire());
                 cbRes.setValue(ctrl.getSelectMatch().getResultats());
                 cbRes.getItems().setAll(EnumSet.allOf(Match.Resultats.class));
                 setButonDelUpd(false);
                 add.setDisable(true);
                 break;
             case LINE_UPDATED:
-                reset_value_combobox();
-                reset_combobox();
-                add.setDisable(false);
-                setButonDelUpd(true);
                 lvMatch.getItems().setAll(ctrl.getAllMatch(ctrl.getNumLineSelected()));
+                ctrl.unselectMatch();
                 break;
             case TOURNOI_UNSELECTED:
-                add.setDisable(true);
-                setButonDelUpd(true);
-                 reset_value_combobox();
-                cbJ1.getItems().setAll();
-                cbJ2.getItems().setAll();
-                cbRes.getItems().setAll();
                 lvInscrit.getItems().setAll();
                 lvMatch.getItems().setAll();
+                add.setDisable(true);
+                setButonDelUpd(true);
+                reset_value_combobox();
+                reset_combobox();
+                ctrl.unselectMatch();
                 break;
             case MATCH_UNSELECTED:
                 add.setDisable(false);
                 setButonDelUpd(true);
                 reset_value_combobox();
                 reset_combobox();
+                cbJ1.getItems().setAll(ctrl.getAllInscrit(ctrl.getNumLineSelected()));
                 break;
         }
 

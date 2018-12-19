@@ -33,20 +33,21 @@ public class Ctrl {
         }
     }
 
-    public void cb2Selection() {
-        lstournois.selectJoueur2();
+    public void cb2Selection(int joueur) {
+        lstournois.selectJoueur2(joueur);
     }
 
-    public void addMatch(Joueur j1, Joueur j2, Resultats r) {
-        lstournois.addMatch(j1, j2, r);
+    public boolean addMatch(Joueur j1, Joueur j2, Resultats r) {
+        return lstournois.addMatch(j1, j2, r);
     }
 
-    public void updMatch(Joueur j1, Joueur j2, Resultats r) {
-        lstournois.updMatch(j1, j2, r);
+    public boolean updMatch(Joueur j1, Joueur j2, Resultats r) {
+        return lstournois.updMatch(j1, j2, r);
+        
     }
 
-    public void deleteMatch(Match m) {
-        lstournois.deleteMatch(m);
+    public boolean deleteMatch(Match m) {
+        return lstournois.deleteMatch(m);
     }
 
     public void selectMatch(int index) {
@@ -80,5 +81,12 @@ public class Ctrl {
     public void unselectMatch() {
         lstournois.unselectMatch();
     }
+    
+    public List<Joueur> getAdversaire2() {
+        return lstournois.getAdversaire2();
+    }
 
+    public List<Joueur> advJoueurSelect(){
+        return lstournois.advJoueurSelect();
+    }
 }
