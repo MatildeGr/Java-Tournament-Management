@@ -19,10 +19,22 @@ package Model{
     class ListeTournois{
     }
 }
+package Controller{
+    class Ctrl<<Controller>>{
+
+    }
+}
+package View{
+    class GestionTournois<<View>>{
+
+    }
+}
+
 ListeTournois "1" o-r- "*" Tournoi : contient
 Tournoi "1" o-right- "*" Match : contient
 Tournoi "1..*" o-- "0*" Joueur : est inscrit
 Match "1..*" *-- "2" Joueur :est composé
 Match *-- Resultats
-
+Controller ..> Model : use
+View"1" <--"1" Controller
 @enduml

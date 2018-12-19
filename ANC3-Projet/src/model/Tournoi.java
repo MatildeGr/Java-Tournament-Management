@@ -101,12 +101,6 @@ public class Tournoi extends Observable {
         JOUEUR_SELECTED = -1;
     }
 
-    public Joueur getJoueur(int pos) {
-        if (pos >= 0 && pos < lsinscrits.size()) {
-            return lsinscrits.get(pos);
-        }
-        return null;
-    }
 
     public int joueurSize() {
         return lsinscrits.size();

@@ -5,39 +5,85 @@ skinparam shadowing false
 package Model{
     class Tournoi{
         - String nom
+        +getName()
+        +toString()
+        +adversaire()
+        +advJoueurSelect()
+        +addJoueur(String nom)
+        +selectJoueur(int joueur)
+        +selectJoueur2(int joueur)
+        +unselectJoueur()
+        +joueurSize()
+        +copyLst()
+        +joueurSelected()
+        +joueur2Selected()
+        +getAllinscrit()
     }
     class Match{
         -Joueur joueur1
         -Joueur joueur2
         -Resultats r
+        +getJoueur1()
+        +getJoueur2()
+        +getResultats()
+        +equals(Object o)
+        +hashCode()
     }
 
     class Joueur{
         -String nom
+        +getName()
+        +copy()
+        +toString()
+        +equals(Object o)
+        +hashCode()
     }
     class Resultats{
         -enum Resultats
     }
     class ListeTournois{
+        +getLines()
+        +nbLines()
+        +getNumLineSelected()
+        +select(int index)
+        +unselectTournoi()
+        +notif()
+        +getAllInscrit()
+        +joueurSize()
+        +selectJoueur(int joueur)
+        +selectJoueur2(int joueur)
+        +getAllMatch(int numLineSelected)
+        +matchSize()
+        +getAdversaire()
+        +advJoueurSelect()
+        +addMatch(Joueur j1,Joueur j2,Resultats r)
+        +updMatch(Joueur j1,Joueur j2,Resultats r)
+        +deleteMatch(Match m)
+        +selectMatch(int index)
+        +getSelectedMatch()
+        +unselectMatch()
+
+
+
     }
 }
 package Controller{
     class Ctrl<<Controller>>{
-        -selectedTournament : int
-        -selectedMatch: int
-        +findTournament(int)
-        +addLineMatch()
-        +lineSelection()
-        +updLineMatch()
-        +deleteLineMatch()
-        +setJoueur1()
-        +setJoueur2()
-        +setResultat()
-        +selectTournoi()
-        +selectMatch()
-        +selectUpdMatch(Joueur joueur1,Joueur joueur2, Resultats r)
-        +selectAddMatch(Joueur joueur1,Joueur joueur2, Resultats r)
-        +selectDeleteMatch(Match m)
+        +lineSeection(int numLine)
+        +getNumLineSelected()
+        +cb1Selection()
+        +cb2Selection()
+        +addmatch(Joueur j1,Joueur j2,Resultats r)
+        +updmatch(Joueur j1,Joueur j2,Resultats r)
+        +selectMatch(int index)
+        +getSelectMatch()
+        +getAllInscrit(int numLineSelected)
+        +getAllMatch(int numLineSelected)
+        +getAdversaire()
+        +getLines()
+        +unselectMatch()
+        +advJoueurSelect()
+
 
     }
 }

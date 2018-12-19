@@ -261,11 +261,6 @@ public class View implements Observer {
         delete.setDisable(b);
         update.setDisable(b);
     }
-//    private void test(){
-//        if(cbJ2.getValue() != null && cbJ2.getValue() == null){
-//            cbJ1.getItems().setAll(Tournoi.adversairev2(cbJ2.getValue()));
-//        }
-//    }
 
     @Override
     public void update(Observable o, Object o1) {
