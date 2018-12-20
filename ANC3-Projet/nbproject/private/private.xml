@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/remy/Desktop/anc31819a_gr1/ANC3-Projet/src/model/ListeTournois.java</file>
-            <file>file:/C:/Users/remy/Desktop/anc31819a_gr1/ANC3-Projet/src/ctrl/Ctrl.java</file>
-            <file>file:/C:/Users/remy/Desktop/anc31819a_gr1/ANC3-Projet/src/model/TypeNotif.java</file>
-            <file>file:/C:/Users/remy/Desktop/anc31819a_gr1/ANC3-Projet/src/view/View.java</file>
-            <file>file:/C:/Users/remy/Desktop/anc31819a_gr1/ANC3-Projet/src/model/Match.java</file>
-            <file>file:/C:/Users/remy/Desktop/anc31819a_gr1/ANC3-Projet/src/model/Tournoi.java</file>
-            <file>file:/C:/Users/remy/Desktop/anc31819a_gr1/ANC3-Projet/src/model/Joueur.java</file>
+            <file>file:/V:/v2/anc31819a_gr1/ANC3-Projet/src/main/Main.java</file>
+            <file>file:/V:/v2/anc31819a_gr1/ANC3-Projet/src/ctrl/Ctrl.java</file>
+            <file>file:/V:/v2/anc31819a_gr1/ANC3-Projet/src/model/Tournoi.java</file>
+            <file>file:/V:/v2/anc31819a_gr1/ANC3-Projet/src/model/ListeTournois.java</file>
+            <file>file:/V:/v2/anc31819a_gr1/ANC3-Projet/src/view/View.java</file>
+            <file>file:/V:/v2/anc31819a_gr1/ANC3-Projet/src/model/Joueur.java</file>
         </group>
     </open-files>
 </project-private>
