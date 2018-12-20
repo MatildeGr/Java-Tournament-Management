@@ -174,7 +174,6 @@ public class View implements Observer {
         configSelectionMatch();
         configSelectionComboBox1();
         configSelectionComboBox2();
-//       configSelectionComboBoxRes();
         configListenerEditLine();
         delete();
         configUpdate();
@@ -196,17 +195,12 @@ public class View implements Observer {
         cbJ1.getSelectionModel().selectedIndexProperty().addListener(
                 observable -> ctrl.cb1Selection(cbJ1.getSelectionModel().getSelectedIndex()));
     }
-//modif 
 
     private void configSelectionComboBox2() {
         cbJ2.getSelectionModel().selectedIndexProperty().addListener(
                 observable -> ctrl.cb2Selection(cbJ2.getSelectionModel().getSelectedIndex()));
     }
 
-//    private void configSelectionComboBoxRes() {
-//        cbRes.getSelectionModel().selectedIndexProperty().addListener(
-//                observable -> add.setDisable(false));
-//    }
     private void configListenerEditLine() {
         add.setOnAction(e -> {
             if (cbJ1.getValue() != null && cbJ2.getValue() != null && cbRes.getValue() != null) {
