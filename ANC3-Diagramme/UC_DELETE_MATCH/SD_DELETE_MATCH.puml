@@ -5,6 +5,8 @@ skinparam shadowing false
 actor user as u
 participant ":Delete" as v <<View>>
 participant ":Controller" as c <<controller>>
+participant ":ListeTournois" as lt <<ListeTournois>>
+participant ":Tournois" as t <<Tournois>>
 create v
 activate u
 activate c
@@ -13,12 +15,19 @@ deactivate c
 v -> v : fillViewDelete()
 activate v
 deactivate v
-u -> v :confirme()
+u -> v :deleteMatch(Match m)
 
 activate v
 v -> c :deleteMatch(int)
 activate c
-c -> c :deleteMatch(int)
+c -> lt :deleteMatch(int)
+activate lt
+lt -> t :deleteMatch(int)
+activate t
+t -> lt  : boolean
+deactivate t
+lt --> c : boolean
+deactivate lt
 c -> v :close()
 deactivate c
 deactivate v

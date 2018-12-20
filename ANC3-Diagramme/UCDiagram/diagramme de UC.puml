@@ -1,0 +1,11 @@
+@startuml diagramme de UC
+actor user as u 
+usecase Tournois as t
+usecase ADD_MATCH as add
+usecase UPD_MATCH as upd
+usecase DELETE_MATCH as delete 
+t <|-- upd : extends
+t <|-- delete : extends
+t <|-- add : extends
+u -> t
+@enduml

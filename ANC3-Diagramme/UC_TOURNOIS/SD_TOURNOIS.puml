@@ -18,13 +18,16 @@ activate v
 deactivate v
 u -> v :selectTournament(int)
 activate v
-v -> c :findTournament(int)
+v -> c :getAllInscrit(int)
 activate c
-c -> lt : findTournament(int)
 activate lt
-lt --> c : t: Tournament
+c -> lt : getAllInscrit(tournoi int)
+lt --> c : lj : List<Joueur>
+c --> v : lj : List<Joueur>
+c -> lt : getAllMatch(tournoi int)
+lt --> c : lm : List<Match>
+c --> v : lm : List<Match>
 deactivate lt
-c --> v :t: Tournament
 deactivate c
 deactivate v
 v -> v : fillListeMatchInscrit()
@@ -35,30 +38,38 @@ alt setValuesMatch
 else selectMatchOnTournament
     u -> v :selectMatch(int)
     activate v
-    v -> c :findMatch(int)
     activate c
-    c -> lm : findMatch(int)
     activate lm
-    lm-->c: m: Match
-    deactivate lm
-    c --> v :m: Match
+    v -> c :matchselect : getSelectMatch(int)
+    c -> lm : getSelectMatch(int)
+    lm --> c : matchselect : int
+    c-->v : matchselect : int
+    v ->c : matchselect.getJoueur1()
+    c ->lm : matchselect.getJoueur1()
+    lm --> c : j1 : Joueur
+    c-->v : j1: Joueur
+    v-> c : matchselect.getJoueur2()
+    c->lm : matchselect.getJoueur2()
+    lm --> c : j2 : Joueur
+    c-->v : j2 : Joueur
+    v->c :matchselect.getAdversaire()
+    c->lm :matchselect.getAdversaire()
+    lm --> c : la : List<Joueur>
+    c-->v : la : List<Joueur>
+    v-> c : matchselect.getAdversaire2()
+    c-> lm :matchselect.getAdversaire2()
+    lm --> c : la2 : List<Joueur>
+    c-->v : la2 : List<Joueur>
+    v -> c : matchselect.getResultats()
+    c -> lm : matchselect.getResultats()
+    lm --> c : r : Resultats
+    c --> v : r : Resultats
     deactivate c
     deactivate v
 
     alt deleteMatch
-        u -> v :delete()
         ref over u,lm :SD_DELETE_MATCH
     else updateMatch
-
-        u -> v :selectMatch(int)
-        activate v
-        v -> c :findMatch(int)
-        activate c
-        c -> lm : findMatch(int)
-        activate lm
-        lm-->c: m: Match
-        deactivate lm
-        c --> v :m: Match
         ref over u,lm :SD_UPD_MATCH
         deactivate c
         deactivate v

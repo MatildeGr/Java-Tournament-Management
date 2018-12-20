@@ -6,16 +6,17 @@ actor user as u
 participant ":Tournoi" as v <<View>>
 participant ":Match" as m
 participant ":Controller" as c <<controller>>
-
+participant ":ListeTournois" as lt <<ListeTournois>>
+participant ":Tournois" as t <<Tournois>>
 
 activate u
-u -> v :setPlayer1(n: String)
+u -> v :setJoueur1(j1: Joueur)
 activate v
 deactivate v
-u -> v :setPlayer2(n: String)
+u -> v :setJoueur2(j2: Joueur)
 activate v
 deactivate v
-u -> v :setScore(s: String)
+u -> v :setResultats(r : Resultats)
 activate v
 deactivate v
 u -> v : addMatch()
@@ -27,8 +28,15 @@ v -> m :Validate() :Error[]
 activate m
 m --> v :[]
 deactivate m
-v -> c :createMatch(o: Match)
+v -> c :addMatch(Joueur j1, Joueur j2, Resultats r)
 deactivate v
 activate c
-c -> c : createMatch(o: Match)
+c -> lt : addMatch(Joueur j1, Joueur j2, Resultats r)
+activate lt
+lt -> t : addMatch(Joueur j1, Joueur j2, Resultats r)
+activate t
+t -> t : addMatch(Joueur j1, Joueur j2, Resultats r)
+ t --> lt : boolean
+ lt --> c : boolean
+ c --> v : boolean
 @enduml

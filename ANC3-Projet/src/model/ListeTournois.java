@@ -62,12 +62,12 @@ public class ListeTournois extends Observable {
         return null;
     }
 
-//    public int joueurSize() {
-//        if (numLineSelected >= 0 && numLineSelected < lsTournois.size()) {
-//            return lsTournois.get(numLineSelected).joueurSize();
-//        }
-//        return -1;
-//    }
+    public int joueurSize() {
+        if (numLineSelected >= 0 && numLineSelected < lsTournois.size()) {
+            return lsTournois.get(numLineSelected).joueurSize();
+        }
+        return -1;
+    }
 
     public void selectJoueurs(int joueur) {
         if (numLineSelected >= 0 && numLineSelected < lsTournois.size()) {

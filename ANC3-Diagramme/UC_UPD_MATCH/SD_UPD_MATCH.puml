@@ -1,34 +1,38 @@
 @startuml SD_UPD_MATCH
-autonumber
 hide footbox
 skinparam shadowing false
 actor user as u 
 participant ":Tournoi" as v <<View>>
-participant ":Match" as m
 participant ":Controller" as c <<controller>>
+participant ":ListeTournois" as lt <<ListeTournois>>
+participant ":Tournois" as t <<Tournois>>
 
 
 activate u
-u -> v :setPlayer1(n: String)
+u -> v :setJoueur1(j1 : Joueur)
 activate v
 deactivate v
-u -> v :setPlayer2(n: String)
+u -> v :setJoueur2(j2: Joueur)
 activate v
 deactivate v
-u -> v :setScore(s: String)
+u -> v :setResultats(r: resultats)
 activate v
 deactivate v
-u -> v : addMatch()
+u -> v : updMatch(Joueur j1,Joueur j2,Resultats r)
 deactivate u 
 activate v
-create m
-v -> m :new()
-v -> m :Validate() :Error[]
-activate m
-m --> v :[]
-deactivate m
-v -> c :updateMatch(o: Match)
-deactivate v
 activate c
-c -> c : updateMatch(o: Match)
+v -> c : updMatch(Joueur j1,Joueur j2,Resultats r)
+activate lt
+c -> lt : updMatch(Joueur j1,Joueur j2,Resultats r)
+activate t
+lt -> t :updMatch(Joueur j1,Joueur j2,Resultats r)
+t -> t : set(Joueur j1,Joueur j2,Resultats r)
+t --> lt : boolean
+lt --> c : boolean
+c --> v : boolean
+deactivate v
+deactivate lt
+deactivate t
+deactivate c
 @enduml

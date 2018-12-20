@@ -92,9 +92,10 @@ package View {
         -Match deleteMatch
     }
      class GestionTournois<<View>>{
-        -List<Tournois> listetournois
-        -List<Match> listematchs
-        -List<Joueur> listeJoueurs
+        -ListView<Tournois> listetournois
+        -TableView<Match> listematchs
+        -ListView<Joueur> listeJoueurs
+        +update()
 
     }
 }
