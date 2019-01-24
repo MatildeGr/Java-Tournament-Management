@@ -23,6 +23,9 @@ import model.Tournament;
  */
 public class ViewModel {
 
+    private static enum StateCombo {
+        LOCKED, UNLOCKED;
+    }
     private final ListTournament lsTournament;
 
     private final IntegerProperty numTournamentSelected = new SimpleIntegerProperty(-1);
@@ -39,6 +42,7 @@ public class ViewModel {
     private final ObjectProperty<Result> res = new SimpleObjectProperty();
     private final BooleanProperty tournamentSelected = new SimpleBooleanProperty(false);
     private final BooleanProperty matchSelected = new SimpleBooleanProperty();
+    private StateCombo state = StateCombo.UNLOCKED;
 
     public ViewModel(ListTournament lsTournament) {
         this.lsTournament = lsTournament;
@@ -78,7 +82,7 @@ public class ViewModel {
         });
 
     }
-    
+
     //gestion de la selection et deselection d'un match
     private void configApplicativeLogigMatch() {
         numMatchSelected.addListener((o, old, newValue) -> {
@@ -103,35 +107,41 @@ public class ViewModel {
     //
     //
     private void configListenerPlayer1Selected() {
-//        p1Selected.addListener((o, old, newValue) -> {
-//            if (validatePosTournament()) {
-//                if (newValue != null) {
-//                    Player p = p2Selected.get();
-//                    combobox2.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
-//                    int pos = combobox2.indexOf(p);
-//                    if (pos > 0) {
-//                        p2.set(combobox2.get(pos));
-//                    }
-//                }
-//            }
-//        }
-//        );
+        p1Selected.addListener((o, old, newValue) -> {
+            switch (state) {
+                case UNLOCKED:
+                    if (validatePosTournament()) {
+                        if (newValue != null) {
+                            state = StateCombo.LOCKED;
+                            Player p = p2Selected.get();
+                            combobox2.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
+                            p2.set(p);
+                            state = StateCombo.UNLOCKED;
+
+                        }
+                    }
+                    break;
+            }
+        });
     }
 
     private void configListenerPlayer2Selected() {
-//        p2Selected.addListener((o, old, newValue) -> {
-//            if (validatePosTournament()) {
-//                if (newValue != null) {
-//                    Player p = p1Selected.get();
-//
-//                    combobox1.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
-//                    if (combobox1.contains(p)) {
-//                        //p1.set(p);
-//                    }
-//                }
-//            }
-//        }
-//        );
+        p2Selected.addListener((o, old, newValue) -> {
+            switch (state) {
+                case UNLOCKED:
+                    if (validatePosTournament()) {
+                        if (newValue != null) {
+                            Player p = p1Selected.get();
+                            state = StateCombo.LOCKED;
+                            combobox1.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
+                            p1.set(p);
+                            state = StateCombo.UNLOCKED;
+
+                        }
+                    }
+                    break;
+            }
+        });
     }
 
     //
