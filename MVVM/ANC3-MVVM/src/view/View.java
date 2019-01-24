@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
@@ -224,12 +223,10 @@ public class View {
     //listener lors de la selection d'un match (ajout joueur 1 dans la valeur du combobox 1)
     public void configListenerP1() {
         p1.addListener((observable, oldValue, newValue) -> {
-            cbJ1.getSelectionModel().select(cbJ1.getSelectionModel().getSelectedIndex());
-            cbJ1.setValue(cbJ1.getValue());
-           // cbJ1.setValue(newValue);
+            cbJ1.setValue(newValue);
         });
     }
-  
+
     //listener lors de la selection d'un match (ajout joueur 2 dans la valeur du combobox 2)
     public void configListenerP2() {
         p2.addListener((observable, oldValue, newValue) -> {

@@ -103,34 +103,35 @@ public class ViewModel {
     //
     //
     private void configListenerPlayer1Selected() {
-        p1Selected.addListener((o, old, newValue) -> {
-            if (validatePosTournament()) {
-                if (newValue != null) {
-                    Player p = p2Selected.get();
-                    combobox2.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
-                    if (combobox2.contains(p)) {
-                        p2.set(p);
-                    }
-                }
-            }
-        }
-        );
+//        p1Selected.addListener((o, old, newValue) -> {
+//            if (validatePosTournament()) {
+//                if (newValue != null) {
+//                    Player p = p2Selected.get();
+//                    combobox2.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
+//                    int pos = combobox2.indexOf(p);
+//                    if (pos > 0) {
+//                        p2.set(combobox2.get(pos));
+//                    }
+//                }
+//            }
+//        }
+//        );
     }
 
     private void configListenerPlayer2Selected() {
-        p2Selected.addListener((o, old, newValue) -> {
-            if (validatePosTournament()) {
-                if (newValue != null) {
-                    Player p = p1Selected.get();
-
-                    combobox1.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
-                   if (combobox1.contains(p)) {
-                       // p1.set(p);
-                   }
-                }
-            }
-        }
-        );
+//        p2Selected.addListener((o, old, newValue) -> {
+//            if (validatePosTournament()) {
+//                if (newValue != null) {
+//                    Player p = p1Selected.get();
+//
+//                    combobox1.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
+//                    if (combobox1.contains(p)) {
+//                        //p1.set(p);
+//                    }
+//                }
+//            }
+//        }
+//        );
     }
 
     //
