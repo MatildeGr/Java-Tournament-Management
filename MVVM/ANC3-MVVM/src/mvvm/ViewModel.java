@@ -70,9 +70,7 @@ public class ViewModel {
             int index = newValue.intValue();
             if (index >= 0) {
                 setLvMatchPlayer(index);
-                combobox1.set(lsTournament.getPlayers(index));
-                combobox2.set(lsTournament.getPlayers(index));
-                comboboxRes.set(FXCollections.observableArrayList(EnumSet.allOf(Match.Result.class)));
+                addListPlayerCombobox(index);
 
             } else {
                 clearLvPlayerMatch();
@@ -87,12 +85,15 @@ public class ViewModel {
     private void configApplicativeLogigMatch() {
         numMatchSelected.addListener((o, old, newValue) -> {
             int index = newValue.intValue();
-            if (index >= 0) {
+            if (validatePosMatch()) {
                 setCbValues(index);
 
             } else {
                 clearCbValues();
-
+                if(validatePosTournament()){
+                    addListPlayerCombobox(numTournamentSelected.get());
+                }
+                resetPlayersSelected();
             }
         });
     }
@@ -108,38 +109,33 @@ public class ViewModel {
     //
     private void configListenerPlayer1Selected() {
         p1Selected.addListener((o, old, newValue) -> {
-            switch (state) {
-                case UNLOCKED:
-                    if (validatePosTournament()) {
-                        if (newValue != null) {
-                            state = StateCombo.LOCKED;
-                            Player p = p2Selected.get();
-                            combobox2.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
-                            p2.set(p);
-                            state = StateCombo.UNLOCKED;
+            if (newValue != null) {
+                switch (state) {
+                    case UNLOCKED:
+                        state = StateCombo.LOCKED;
+                        Player p = p2Selected.get();
+                        combobox2.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
+                        p2.set(p);
+                        state = StateCombo.UNLOCKED;
+                        break;
+                }
 
-                        }
-                    }
-                    break;
             }
         });
     }
 
     private void configListenerPlayer2Selected() {
         p2Selected.addListener((o, old, newValue) -> {
-            switch (state) {
-                case UNLOCKED:
-                    if (validatePosTournament()) {
-                        if (newValue != null) {
-                            Player p = p1Selected.get();
-                            state = StateCombo.LOCKED;
-                            combobox1.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
-                            p1.set(p);
-                            state = StateCombo.UNLOCKED;
-
-                        }
-                    }
-                    break;
+            if (newValue != null) {
+                switch (state) {
+                    case UNLOCKED:
+                        Player p = p1Selected.get();
+                        state = StateCombo.LOCKED;
+                        combobox1.set(lsTournament.getOpponents(numTournamentSelected.get(), newValue));
+                        p1.set(p);
+                        state = StateCombo.UNLOCKED;
+                        break;
+                }
             }
         });
     }
@@ -269,6 +265,9 @@ public class ViewModel {
     public void addMatch(Match m) {
         if (validatePosTournament()) {
             lsTournament.addMatch(numTournamentSelected.get(), m);
+            addListPlayerCombobox(numTournamentSelected.get());
+            clearCbValues();
+            resetPlayersSelected();
         }
     }
     //
@@ -348,5 +347,18 @@ public class ViewModel {
     private void clearLvPlayerMatch() {
         clearLvMatch();
         clearLvPlayer();
+    }
+
+    //ajoute tous les joueurs d'un tournois dans les combobox
+    private void addListPlayerCombobox(int index) {
+        combobox1.set(lsTournament.getPlayers(index));
+        combobox2.set(lsTournament.getPlayers(index));
+        comboboxRes.set(FXCollections.observableArrayList(EnumSet.allOf(Match.Result.class)));
+    }
+
+    //met les joueurs selectionnés a null
+    private void resetPlayersSelected() {
+        p1Selected.set(null);
+        p2Selected.set(null);
     }
 }

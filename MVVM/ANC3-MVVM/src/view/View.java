@@ -168,22 +168,69 @@ public class View {
 
     public void config() {
         congigAllListener();
+        congAllBinding();
+    }
+
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //               CONFIG BINDING            //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
+    //configuration de tous les binding
+    private void congAllBinding(){
+        bindingListsViews();
+        bindToProperty();
+        bindCbList();
+        bindCbValues();
+        bindSelectionView();
+    }
+    //binding listView
+    private void bindingListsViews() {
         lvTournoi.itemsProperty().bind(viewModel.linesProperty());
+        lvMatch.itemsProperty().bind(viewModel.matchProperty());
+        lvInscrit.itemsProperty().bind(viewModel.playerProperty());
+    }
+
+    //binding to property
+    private void bindToProperty() {
         viewModel.bindNumTournamentSlectedPropTo(getListTournament().selectedIndexProperty());
         viewModel.bindNumMatchSlectedPropTo(getListMatch().selectedIndexProperty());
-        lvMatch.itemsProperty().bind(viewModel.matchProperty());
+    }
+
+    //Binding list combobox
+    private void bindCbList() {
         cbJ1.itemsProperty().bind(viewModel.combobox1Property());
         cbJ2.itemsProperty().bind(viewModel.combobox2Property());
         cbRes.itemsProperty().bind(viewModel.comboboxResProperty());
-        lvInscrit.itemsProperty().bind(viewModel.playerProperty());
+    }
+
+    //binding combobox values
+    private void bindCbValues() {
         p1.bind(viewModel.Player1Selected());
         p2.bind(viewModel.Player2Selected());
         res1.bind(viewModel.resultSelected());
+    }
+
+    //binding des selections dans la vue 
+    private void bindSelectionView() {
         tournamentSelected.bind(viewModel.tournamentSelectedProperty());
         matchSelected.bind(viewModel.matchSelectedProperty());
         p1Selected.bindBidirectional(viewModel.Player1CbValue());
         p2Selected.bindBidirectional(viewModel.Player2CbValue());
     }
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //             SELECTION MODEL             //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
 
     //retourne la liste du listView tournoi
     private SelectionModel<Tournament> getListTournament() {
@@ -195,6 +242,15 @@ public class View {
         return lvMatch.getSelectionModel();
     }
 
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //           CONFIG ALL LISTENERS          //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
     //méthode de configuration de tous les groupes de listener et setOnAction
     private void congigAllListener() {
         configListener();
