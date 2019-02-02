@@ -15,7 +15,11 @@ public class BuilderElemToQuest {
         List<Elem> lsElem = loadQuestions();
         List<Question> result = new ArrayList();
                 lsElem.forEach((e) -> {
-            result.add(new Question(e.name,e.points,e.responses,e.numCorrectResponse));
+                    List<Reponse> reponses = new ArrayList();
+                    e.responses.forEach((s) -> {
+                        reponses.add(new Reponse(s));
+            });
+            result.add(new Question(e.name,e.points,reponses,e.numCorrectResponse));
         });
         return result;
     }

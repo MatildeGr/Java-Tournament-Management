@@ -52,6 +52,7 @@ public class View {
     private final Button add = new Button();
     private final Button delete = new Button();
     private final Button update = new Button();
+    private final Button play = new Button();
 
     private final ViewModel viewModel;
 
@@ -67,7 +68,7 @@ public class View {
         this.viewModel = viewModel;
         configScene();
         config();
-        Scene scene = new Scene(root, 1000, 700);
+        Scene scene = new Scene(root, 1100, 700);
         primaryStage.setTitle("Gestion des tournois (mvvm)");
         primaryStage.setScene(scene);
     }
@@ -133,6 +134,7 @@ public class View {
         res.setText("Résultat");
         add.setText("Ajouter");
         update.setText("Modifier");
+        play.setText("Jouer");
         cbJ1.setPrefWidth(CB);
         cbJ2.setPrefWidth(CB);
         cbRes.setPrefWidth(CB * 2);
@@ -144,6 +146,7 @@ public class View {
         upd.add(cbRes, 2, 1);
         upd.add(add, 3, 1);
         upd.add(update, 4, 1);
+        upd.add(play,5,1);
 
     }
 
