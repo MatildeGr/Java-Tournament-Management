@@ -50,7 +50,6 @@
 -fx-border-width: 0px;
 }
 #title{
-    -fx-font: bolder;
     -fx-font-size: 18;
     -fx-text-fill:#A3AFAD;
     -fx-underline: true;

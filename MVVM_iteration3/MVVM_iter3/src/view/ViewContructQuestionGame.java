@@ -6,7 +6,10 @@
 package view;
 
 import java.net.URL;
-import javafx.collections.ObservableList;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,18 +17,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Question;
+import mvvm.ViewModelConstructQuest;
 
 /**
  *
  * @author 3009rerys
  */
 public class ViewContructQuestionGame {
+
+    private final ViewModelConstructQuest viewModel;
 
     private static final int WIDTHLIST = 300, HEIGHTLIST = 800, SPACING60 = 60, SPACING80 = 80, SPACINGBUTTON = 10, PADDING = 20;
 
@@ -48,7 +55,7 @@ public class ViewContructQuestionGame {
     private final Button cancel = new Button();
 
     private final ListView<Question> listQuest = new ListView();
-    private final ListView<String> listQuestChoix = new ListView();
+    private final ListView<Question> listQuestChoix = new ListView();
 
     private final RadioButton rq1 = new RadioButton();
     private final RadioButton rq2 = new RadioButton();
@@ -56,9 +63,15 @@ public class ViewContructQuestionGame {
     private final RadioButton rq4 = new RadioButton();
     final ToggleGroup group = new ToggleGroup();
 
-    public ViewContructQuestionGame(Stage stage,ObservableList<Question> lsQuest) {
+    private final IntegerProperty nbQuestChoix = new SimpleIntegerProperty();
+    private final IntegerProperty nbPoints = new SimpleIntegerProperty();
+    private final IntegerProperty nbPointsDispo = new SimpleIntegerProperty();
+    private final StringProperty quest = new SimpleStringProperty();
+
+    public ViewContructQuestionGame(Stage stage, ViewModelConstructQuest viewModel) {
+        this.viewModel = viewModel;
         initView();
-        listQuest.setItems(lsQuest);
+        initBindding();
         Scene scene = new Scene(root, 900, 600);
         final URL buttonCSSURL = getClass().getResource("style.css");
         scene.getStylesheets().add(buttonCSSURL.toExternalForm());
@@ -144,7 +157,7 @@ public class ViewContructQuestionGame {
     }
 
     private void configLabelPoints() {
-        points.setText("3 points");
+        points.setText("Points");
     }
 
     private void configAddVBoxQuestionPoints() {
@@ -227,7 +240,7 @@ public class ViewContructQuestionGame {
 
     private void configLabelTopQuestChoix() {
         lbNbQuest.setPrefWidth(WIDTHLIST);
-        lbNbQuest.setText("Nombre de questions: 2");
+        lbNbQuest.setText("Nombre de questions: " + nbQuestChoix.get());
         lbNbQuest.setAlignment(Pos.CENTER);
     }
 
@@ -253,4 +266,73 @@ public class ViewContructQuestionGame {
         root.getChildren().addAll(list, viewer, selected);
     }
 
+    public void initBindding() {
+        listQuest.itemsProperty().bind(viewModel.questionsProperty());
+        listQuestChoix.itemsProperty().bind(viewModel.questionsChoixProperty());
+        viewModel.bindNumQuestSlectedPropTo(getListQuestions().selectedIndexProperty());
+        viewModel.bindNumQuestChoixSlectedPropTo(getListQuestionsChoix().selectedIndexProperty());
+        nbQuestChoix.bind(viewModel.nbQuestChoix());
+        quest.bind(viewModel.nameQuestSelected());
+        setOnActionAddQuest();
+        setOnActionRemoveQuest();
+        configListenerNbQuestChoix();
+        configLIstenerNomQuest();
+        nbPoints.bind(viewModel.nbPointProperty());
+        configLIstenerNbPoints();
+        nbPointsDispo.bind(viewModel.nbPointsDispoProperty());
+        configLIstenerNbPointsDispo();
+    }
+
+    ///////////selection model////////////
+    //retourne la liste du listView question
+    private SelectionModel<Question> getListQuestions() {
+        return listQuest.getSelectionModel();
+    }
+
+    //retourne la liste du listView question choisit
+    private SelectionModel<Question> getListQuestionsChoix() {
+        return listQuestChoix.getSelectionModel();
+    }
+
+    ///////////////////listener///////////
+    public void configListenerNbQuestChoix() {
+        nbQuestChoix.addListener((observable, oldValue, newValue) -> {
+            lbNbQuest.setText("Nombre de questions: " + newValue);
+        });
+    }
+
+    public void configLIstenerNomQuest() {
+        quest.addListener((observable, oldValue, newValue) -> {
+            lbquestion.setText(newValue);
+        });
+    }
+
+    public void configLIstenerNbPoints() {
+        nbPoints.addListener((observable, oldValue, newValue) -> {
+            points.setText(newValue.toString() + " points");
+        });
+    }
+
+    public void configLIstenerNbPointsDispo() {
+        nbPointsDispo.addListener((observable, oldValue, newValue) -> {
+            lbPointsDisp.setText("Points disponibles: " + newValue);
+        });
+    }
+
+    ///////////////set on action/////////
+    //ajoute une question dans la liste des questions selectionnées 
+    private void setOnActionAddQuest() {
+        addQuest.setOnAction(e -> {
+            viewModel.addQuest();
+        });
+
+    }
+    //retire une question dans la liste des questions choix selectionnées 
+
+    private void setOnActionRemoveQuest() {
+        removeQuest.setOnAction(e -> {
+            viewModel.removeQuest();
+        });
+
+    }
 }

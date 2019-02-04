@@ -5,13 +5,12 @@
  */
 package mediator;
 
-import javafx.collections.ObservableList;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import static model.BuilderElemToQuest.questions;
-import model.ListQuestions;
+import model.ConstructGame;
 import model.ListTournament;
 import mvvm.ViewModel;
+import mvvm.ViewModelConstructQuest;
 import view.View;
 import view.ViewContructQuestionGame;
 
@@ -24,12 +23,8 @@ public class Mediator {
     private static Mediator INSTANCE = null;
 
     private final ListTournament lsTournament = new ListTournament();
-    private final ObservableList lsQuestion = questions();
 
-    private Mediator() {
-    }
-
-    ;
+    private Mediator() {};
     
         public static Mediator getInstance() {
         if (INSTANCE == null) {
@@ -46,7 +41,9 @@ public class Mediator {
 
     public void constructionPartie() {
         Stage stage = new Stage();
-        ViewContructQuestionGame view = new ViewContructQuestionGame(stage,lsQuestion);
+        ConstructGame newGame = new ConstructGame();
+        ViewModelConstructQuest viewConstruct = new ViewModelConstructQuest(newGame);
+        ViewContructQuestionGame view = new ViewContructQuestionGame(stage,viewConstruct);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
     }
