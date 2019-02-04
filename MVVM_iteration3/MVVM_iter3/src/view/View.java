@@ -1,5 +1,6 @@
 package view;
 
+import java.net.URL;
 import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -69,6 +70,8 @@ public class View {
         configScene();
         config();
         Scene scene = new Scene(root, 1100, 700);
+        final URL buttonCSSURL = getClass().getResource("style.css");
+        scene.getStylesheets().add(buttonCSSURL.toExternalForm());
         primaryStage.setTitle("Gestion des tournois (mvvm)");
         primaryStage.setScene(scene);
     }
@@ -146,7 +149,7 @@ public class View {
         upd.add(cbRes, 2, 1);
         upd.add(add, 3, 1);
         upd.add(update, 4, 1);
-        upd.add(play,5,1);
+        upd.add(play, 5, 1);
 
     }
 
@@ -184,13 +187,14 @@ public class View {
     //
     //
     //configuration de tous les binding
-    private void congAllBinding(){
+    private void congAllBinding() {
         bindingListsViews();
         bindToProperty();
         bindCbList();
         bindCbValues();
         bindSelectionView();
     }
+
     //binding listView
     private void bindingListsViews() {
         lvTournoi.itemsProperty().bind(viewModel.linesProperty());
@@ -363,6 +367,8 @@ public class View {
                 viewModel.addMatch(m);
             }
         });
+        play.setOnAction(e -> ViewModel.constructionPartie());
+
     }
 
     //

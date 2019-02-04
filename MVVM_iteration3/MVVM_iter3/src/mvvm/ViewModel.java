@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import mediator.Mediator;
 import model.ListTournament;
 import model.Match;
 import model.Match.Result;
@@ -360,5 +361,9 @@ public class ViewModel {
     private void resetPlayersSelected() {
         p1Selected.set(null);
         p2Selected.set(null);
+    }
+    
+    public static void constructionPartie(){
+        Mediator.constructionPartie();
     }
 }
