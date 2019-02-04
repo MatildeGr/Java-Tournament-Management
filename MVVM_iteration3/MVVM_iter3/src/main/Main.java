@@ -8,9 +8,7 @@ package main;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.stage.Stage;
-import model.ListTournament;
-import mvvm.ViewModel;
-import view.View;
+import mediator.Mediator;
 
 /**
  *
@@ -20,10 +18,7 @@ public class Main extends Application {
     
         @Override
     public void start(Stage primaryStage) throws Exception {
-        ListTournament lsTournament = new ListTournament();
-        ViewModel viewModel = new ViewModel(lsTournament);
-        View view = new View(primaryStage, viewModel);
-        primaryStage.show();
+        Mediator.getInstance().managerView(primaryStage);
     }
 
     public static void main(String[] args) {

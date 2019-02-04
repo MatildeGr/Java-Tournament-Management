@@ -117,7 +117,7 @@ public class View {
         resultat.setSortable(false);
         joueur1.setPrefWidth(TABLEWIDTH);
         joueur2.setPrefWidth(TABLEWIDTH);
-        resultat.setPrefWidth(TABLEWIDTH * 1.25);
+        resultat.setPrefWidth(TABLEWIDTH * 3.2);
         lvMatch.getColumns().addAll(joueur1, joueur2, resultat);
         match.setSpacing(SPACING);
         lbMatch.setText("Matchs");
@@ -367,7 +367,7 @@ public class View {
                 viewModel.addMatch(m);
             }
         });
-        play.setOnAction(e -> ViewModel.constructionPartie());
+        play.setOnAction(e -> viewModel.constructionPartie());
 
     }
 

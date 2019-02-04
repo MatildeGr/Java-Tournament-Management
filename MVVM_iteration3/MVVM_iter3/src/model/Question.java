@@ -35,4 +35,9 @@ public class Question {
     public int getNumRep(){
         return numCorrectReponse;
     }
+    
+    @Override
+    public String toString(){
+        return nom;
+    }
 }

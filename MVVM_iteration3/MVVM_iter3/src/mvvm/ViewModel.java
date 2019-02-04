@@ -363,7 +363,7 @@ public class ViewModel {
         p2Selected.set(null);
     }
     
-    public static void constructionPartie(){
-        Mediator.constructionPartie();
+    public void constructionPartie(){
+        Mediator.getInstance().constructionPartie();
     }
 }

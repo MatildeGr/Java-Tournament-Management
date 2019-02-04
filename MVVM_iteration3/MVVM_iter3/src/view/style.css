@@ -13,10 +13,10 @@
     -fx-font-size: 10px;
     -fx-padding: 10 20 10 20;
 }
-.list-view {
+.list-view, .table-view{
     -fx-background-color: #38424b;
 }
-.list-view .list-cell:hover {
+.list-view .list-cell:hover,.table-view .table-cell:hover {
     -fx-background-color: #1f2429;
 }
 
@@ -24,7 +24,7 @@
     -fx-background-color: #25242c;
 }
 
-.list-view .list-cell {
+.list-view .list-cell,.table-view .table-cell {
     -fx-background-color: #38424b;
     -fx-text-fill: white;
 }
@@ -58,5 +58,8 @@
 
 #quest{
     -fx-font-size: 15;
+}
+.combo-box{
+    -fx-background-color: #38424b;
 }
 

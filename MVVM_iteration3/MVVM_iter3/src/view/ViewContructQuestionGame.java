@@ -5,8 +5,8 @@
  */
 package view;
 
-import mvvm.*;
 import java.net.URL;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Question;
 
 /**
  *
@@ -46,7 +47,7 @@ public class ViewContructQuestionGame {
     private final Button validate = new Button();
     private final Button cancel = new Button();
 
-    private final ListView<String> listQuest = new ListView();
+    private final ListView<Question> listQuest = new ListView();
     private final ListView<String> listQuestChoix = new ListView();
 
     private final RadioButton rq1 = new RadioButton();
@@ -55,12 +56,13 @@ public class ViewContructQuestionGame {
     private final RadioButton rq4 = new RadioButton();
     final ToggleGroup group = new ToggleGroup();
 
-    public ViewContructQuestionGame(Stage stage) {
+    public ViewContructQuestionGame(Stage stage,ObservableList<Question> lsQuest) {
         initView();
+        listQuest.setItems(lsQuest);
         Scene scene = new Scene(root, 900, 600);
         final URL buttonCSSURL = getClass().getResource("style.css");
         scene.getStylesheets().add(buttonCSSURL.toExternalForm());
-        stage.setTitle("Construction quéstionnaire");
+        stage.setTitle("Questions Game");
         stage.setScene(scene);
     }
 

@@ -2,6 +2,8 @@ package model;
 import java.util.List;
 import element.*;
 import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 /**
  *
  * @author 3009rerys
@@ -11,9 +13,9 @@ public class BuilderElemToQuest {
         return Elements.loadElemsFromFile("Questions.json");
     } 
     
-    public static List<Question> questions(){
+    public static ObservableList<Question> questions(){
         List<Elem> lsElem = loadQuestions();
-        List<Question> result = new ArrayList();
+        ObservableList<Question> result = FXCollections.observableArrayList();
                 lsElem.forEach((e) -> {
                     List<Reponse> reponses = new ArrayList();
                     e.responses.forEach((s) -> {

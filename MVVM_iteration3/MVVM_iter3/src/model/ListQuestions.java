@@ -1,6 +1,6 @@
 package model;
 
-import java.util.List;
+import javafx.collections.ObservableList;
 import static model.BuilderElemToQuest.questions;
 
 /**
@@ -8,13 +8,13 @@ import static model.BuilderElemToQuest.questions;
  * @author 3009rerys
  */
 public class ListQuestions {
-    private final List<Question> questions;
+    private final ObservableList<Question> questions;
     
     public ListQuestions(){
         questions = questions();
     }
     
-    public List<Question> getQuestions(){
+    public ObservableList<Question> getQuestions(){
         return questions;
     }
     
