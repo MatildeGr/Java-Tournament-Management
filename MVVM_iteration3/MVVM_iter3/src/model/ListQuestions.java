@@ -36,4 +36,11 @@ public class ListQuestions {
         return questions.remove(q);
     }
     
+    //retourne le nombre de points de la liste
+    public int getPoints(){
+        int res = 0;
+        res = questions.stream().map((q) -> q.getPoints()).reduce(res, Integer::sum);
+        return res;
+    }
+    
 }

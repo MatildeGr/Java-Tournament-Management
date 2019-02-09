@@ -59,9 +59,10 @@ public class View {
 
     private final ObjectProperty<Player> p1 = new SimpleObjectProperty();
     private final ObjectProperty<Player> p2 = new SimpleObjectProperty();
+    private final ObjectProperty<Result> res1 = new SimpleObjectProperty();
     private final ObjectProperty<Player> p1Selected = new SimpleObjectProperty();
     private final ObjectProperty<Player> p2Selected = new SimpleObjectProperty();
-    private final ObjectProperty<Result> res1 = new SimpleObjectProperty();
+    private final ObjectProperty<Result> resultSelected = new SimpleObjectProperty();
     private final BooleanProperty tournamentSelected = new SimpleBooleanProperty();
     private final BooleanProperty matchSelected = new SimpleBooleanProperty();
 
@@ -228,6 +229,7 @@ public class View {
         matchSelected.bind(viewModel.matchSelectedProperty());
         p1Selected.bindBidirectional(viewModel.Player1CbValue());
         p2Selected.bindBidirectional(viewModel.Player2CbValue());
+        resultSelected.bindBidirectional(viewModel.ResultCbValue());
     }
     //
     //
@@ -281,6 +283,7 @@ public class View {
         configListenerRes1();
         configListenerComboboxPlayer1();
         configListenerComboboxPlayer2();
+        configListenerComboboxResultat();
     }
 
     //listener lors de la selection d'un match (ajout joueur 1 dans la valeur du combobox 1)
@@ -316,6 +319,12 @@ public class View {
                 observable -> p2Selected.set(cbJ2.getValue()));
     }
 
+    //listener selection du resultat
+    private void configListenerComboboxResultat() {
+        cbRes.getSelectionModel().selectedIndexProperty().addListener(
+                observable -> resultSelected.set(cbRes.getValue()));
+    }
+
     //
     //
     /////////////////////////////////////////////
@@ -334,39 +343,17 @@ public class View {
 
     // supprime un match avec demande de confirmation
     private void setOnActionAddDelete() {
-        delete.setOnAction(e -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Demande de confirmation");
-            Match m = lvMatch.getSelectionModel().getSelectedItem();
-            alert.setHeaderText("Suppression du match entre " + m.getPlayer1() + " et " + m.getPlayer2());
-            alert.setContentText("Souhaitez-vous supprimer ce match ?");
-            Optional<ButtonType> action = alert.showAndWait();
-            if (action.get() == ButtonType.OK) {
-                viewModel.deleteMatch(m);
-            }
-        });
-
+        delete.setOnAction(e -> viewModel.deleteMatch());
     }
 
     //modifie un match 
     private void setOnActionUpdate() {
-        update.setOnAction(e -> {
-            if (cbJ1.getValue() != null && cbJ2.getValue() != null && cbRes.getValue() != null) {
-                Match m = new Match(cbJ1.getValue(), cbJ2.getValue(), cbRes.getValue());
-                viewModel.updatematch(m);
-            }
-        }
-        );
+        update.setOnAction(e -> viewModel.updatematch());
     }
 
     //ajoute un match 
     private void setOnActionAddMatch() {
-        add.setOnAction(e -> {
-            if (cbJ1.getValue() != null && cbJ2.getValue() != null && cbRes.getValue() != null) {
-                Match m = new Match(cbJ1.getValue(), cbJ2.getValue(), cbRes.getValue());
-                viewModel.addMatch(m);
-            }
-        });
+        add.setOnAction(e -> viewModel.addMatch());
         play.setOnAction(e -> viewModel.constructionPartie());
 
     }

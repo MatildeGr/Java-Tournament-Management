@@ -15,4 +15,9 @@ public class Reponse {
     public String getReponse(){
         return reponse;
     }
+    
+    @Override
+    public String toString(){
+        return reponse;
+    }
 }

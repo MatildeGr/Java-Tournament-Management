@@ -1,6 +1,7 @@
 package mvvm;
 
 import java.util.EnumSet;
+import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -11,6 +12,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import mediator.Mediator;
 import model.ListTournament;
 import model.Match;
@@ -38,9 +41,10 @@ public class ViewModel {
     private final ListProperty<Result> comboboxRes = new SimpleListProperty();
     private final ObjectProperty<Player> p1 = new SimpleObjectProperty();
     private final ObjectProperty<Player> p2 = new SimpleObjectProperty();
+    private final ObjectProperty<Result> res = new SimpleObjectProperty();
     private final ObjectProperty<Player> p1Selected = new SimpleObjectProperty();
     private final ObjectProperty<Player> p2Selected = new SimpleObjectProperty();
-    private final ObjectProperty<Result> res = new SimpleObjectProperty();
+    private final ObjectProperty<Result> resultSelected = new SimpleObjectProperty();
     private final BooleanProperty tournamentSelected = new SimpleBooleanProperty(false);
     private final BooleanProperty matchSelected = new SimpleBooleanProperty();
     private StateCombo state = StateCombo.UNLOCKED;
@@ -91,7 +95,7 @@ public class ViewModel {
 
             } else {
                 clearCbValues();
-                if(validatePosTournament()){
+                if (validatePosTournament()) {
                     addListPlayerCombobox(numTournamentSelected.get());
                 }
                 resetPlayersSelected();
@@ -210,6 +214,11 @@ public class ViewModel {
         return p2Selected;
     }
 
+    //retourn le resultat selectionné
+    public ObjectProperty<Result> ResultCbValue() {
+        return resultSelected;
+    }
+
     //retourne vrai ou faux si un tournoi est selectionné
     public BooleanProperty tournamentSelectedProperty() {
         return tournamentSelected;
@@ -249,22 +258,32 @@ public class ViewModel {
     //
     //
     //suppresion d'un match
-    public void deleteMatch(Match m) {
+    public void deleteMatch() {
         if (validatePosTournament() && validatePosMatch()) {
-            lsTournament.deleteMatch(numTournamentSelected.get(), m);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Demande de confirmation");
+            Match m = lvMatch.get(numMatchSelected.get());
+            alert.setHeaderText("Suppression du match entre " + m.getPlayer1() + " et " + m.getPlayer2());
+            alert.setContentText("Souhaitez-vous supprimer ce match ?");
+            Optional<ButtonType> action = alert.showAndWait();
+            if (action.get() == ButtonType.OK) {
+                lsTournament.deleteMatch(numTournamentSelected.get(), m);
+            }
         }
     }
 
     //mise à jour d'un match
-    public void updatematch(Match m) {
-        if (validatePosTournament() && validatePosMatch()) {
+    public void updatematch() {
+        if (p1Selected.get() != null && p2Selected.get() != null && resultSelected.get() != null && validatePosTournament() && validatePosMatch()) {
+            Match m = new Match(p1Selected.get(), p2Selected.get(), resultSelected.get());
             lsTournament.updateMatch(numTournamentSelected.get(), numMatchSelected.get(), m);
         }
     }
 
     //ajout d'un match dans un tournoi
-    public void addMatch(Match m) {
-        if (validatePosTournament()) {
+    public void addMatch() {
+        if (p1Selected.get() != null && p2Selected.get() != null && resultSelected.get() != null && validatePosTournament()) {
+            Match m = new Match(p1Selected.get(), p2Selected.get(), resultSelected.get());
             lsTournament.addMatch(numTournamentSelected.get(), m);
             addListPlayerCombobox(numTournamentSelected.get());
             clearCbValues();
@@ -362,8 +381,8 @@ public class ViewModel {
         p1Selected.set(null);
         p2Selected.set(null);
     }
-    
-    public void constructionPartie(){
-        Mediator.getInstance().constructionPartie();
+
+    public void constructionPartie() {
+        Mediator.getInstance().constructionPartie(p1Selected.get(), p2Selected.get());
     }
 }

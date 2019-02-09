@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import java.net.URL;
@@ -33,8 +28,10 @@ import mvvm.ViewModelConstructQuest;
 public class ViewContructQuestionGame {
 
     private final ViewModelConstructQuest viewModel;
+    private final Stage stage;
 
     private static final int WIDTHLIST = 300, HEIGHTLIST = 800, SPACING60 = 60, SPACING80 = 80, SPACINGBUTTON = 10, PADDING = 20;
+    private final int maxPoints;
 
     private final HBox root = new HBox(), btt = new HBox();
     private final VBox list = new VBox(), viewer = new VBox(), selected = new VBox(), btb = new VBox(), question = new VBox(), radioButton = new VBox();
@@ -66,12 +63,21 @@ public class ViewContructQuestionGame {
     private final IntegerProperty nbQuestChoix = new SimpleIntegerProperty();
     private final IntegerProperty nbPoints = new SimpleIntegerProperty();
     private final IntegerProperty nbPointsDispo = new SimpleIntegerProperty();
+    private final IntegerProperty nbPointsQuestSelect = new SimpleIntegerProperty();
+    private final IntegerProperty numReponse = new SimpleIntegerProperty();
+
     private final StringProperty quest = new SimpleStringProperty();
+    private final StringProperty reponse1 = new SimpleStringProperty();
+    private final StringProperty reponse2 = new SimpleStringProperty();
+    private final StringProperty reponse3 = new SimpleStringProperty();
+    private final StringProperty reponse4 = new SimpleStringProperty();
 
     public ViewContructQuestionGame(Stage stage, ViewModelConstructQuest viewModel) {
         this.viewModel = viewModel;
+        maxPoints = viewModel.getMaxPoints();
+        this.stage = stage;
         initView();
-        initBindding();
+        config();
         Scene scene = new Scene(root, 900, 600);
         final URL buttonCSSURL = getClass().getResource("style.css");
         scene.getStylesheets().add(buttonCSSURL.toExternalForm());
@@ -100,7 +106,7 @@ public class ViewContructQuestionGame {
 
     private void configLabelTopQuestion() {
         lbMatch.setPrefWidth(WIDTHLIST);
-        lbMatch.setText("Match joueur 1 joueur2");
+        lbMatch.setText("Match : " + viewModel.getPlayer1() + " - " + viewModel.getPlayer2());
         lbMatch.setAlignment(Pos.CENTER);
     }
 
@@ -111,7 +117,7 @@ public class ViewContructQuestionGame {
 
     private void configLabelBottomQuestion() {
         lbPointsDisp.setPrefWidth(WIDTHLIST);
-        lbPointsDisp.setText("Points disponibles: 55");
+        lbPointsDisp.setText("Points disponibles: " + nbPointsDispo.getValue());
         lbPointsDisp.setAlignment(Pos.CENTER);
     }
 
@@ -174,20 +180,15 @@ public class ViewContructQuestionGame {
     private void configRadioButton() {
         rq1.setToggleGroup(group);
         rq1.setText("reponse 1");
-        rq1.setUserData("Reponse 1");
-        rq1.setSelected(true);
         rq1.setDisable(true);
         rq2.setToggleGroup(group);
         rq2.setText("reponse 2");
-        rq2.setUserData("Reponse 2");
         rq2.setDisable(true);
         rq3.setToggleGroup(group);
         rq3.setText("reponse 3");
-        rq3.setUserData("Reponse 3");
         rq3.setDisable(true);
         rq4.setToggleGroup(group);
         rq4.setText("reponse 4");
-        rq4.setUserData("Reponse 4");
         rq4.setDisable(true);
     }
 
@@ -251,7 +252,7 @@ public class ViewContructQuestionGame {
 
     private void configLabelBottomQuestChoix() {
         lbPointsQuest.setPrefWidth(WIDTHLIST);
-        lbPointsQuest.setText("Points questionnaire: 3/10");
+        lbPointsQuest.setText("Points questionnaire: 0/" + maxPoints);
         lbPointsQuest.setAlignment(Pos.CENTER);
     }
 
@@ -266,24 +267,67 @@ public class ViewContructQuestionGame {
         root.getChildren().addAll(list, viewer, selected);
     }
 
-    public void initBindding() {
-        listQuest.itemsProperty().bind(viewModel.questionsProperty());
-        listQuestChoix.itemsProperty().bind(viewModel.questionsChoixProperty());
-        viewModel.bindNumQuestSlectedPropTo(getListQuestions().selectedIndexProperty());
-        viewModel.bindNumQuestChoixSlectedPropTo(getListQuestionsChoix().selectedIndexProperty());
-        nbQuestChoix.bind(viewModel.nbQuestChoix());
-        quest.bind(viewModel.nameQuestSelected());
-        setOnActionAddQuest();
-        setOnActionRemoveQuest();
-        configListenerNbQuestChoix();
-        configLIstenerNomQuest();
-        nbPoints.bind(viewModel.nbPointProperty());
-        configLIstenerNbPoints();
-        nbPointsDispo.bind(viewModel.nbPointsDispoProperty());
-        configLIstenerNbPointsDispo();
+    public void config() {
+        congigAllListener();
+        congAllBinding();
     }
 
-    ///////////selection model////////////
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //               CONFIG BINDING            //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
+    //configuration de tous les binding
+    private void congAllBinding() {
+        bindingListsViews();
+        bindToProperty();
+        bindQuestSelected();
+        bindPointsListView();
+    }
+
+    //binding listView
+    private void bindingListsViews() {
+        listQuest.itemsProperty().bind(viewModel.questionsProperty());
+        listQuestChoix.itemsProperty().bind(viewModel.questionsChoixProperty());
+    }
+
+    //binding to property
+    private void bindToProperty() {
+        viewModel.bindNumQuestSlectedPropTo(getListQuestions().selectedIndexProperty());
+        viewModel.bindNumQuestChoixSlectedPropTo(getListQuestionsChoix().selectedIndexProperty());
+    }
+
+    //binding question selectionné
+    private void bindQuestSelected() {
+        quest.bind(viewModel.nameQuestSelected());
+        nbPoints.bind(viewModel.nbPointProperty());
+        reponse1.bind(viewModel.reponse1SelectedProperty());
+        reponse2.bind(viewModel.reponse2SelectedProperty());
+        reponse3.bind(viewModel.reponse3SelectedProperty());
+        reponse4.bind(viewModel.reponse4SelectedProperty());
+        numReponse.bind(viewModel.numReponseProperty());
+    }
+
+    //binding points des listes
+    private void bindPointsListView() {
+        nbPointsDispo.bind(viewModel.nbPointsDispoProperty());
+        nbPointsQuestSelect.bind(viewModel.nbPointsQuestSelectProperty());
+        nbQuestChoix.bind(viewModel.nbQuestChoix());
+    }
+
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //             SELECTION MODEL             //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
     //retourne la liste du listView question
     private SelectionModel<Question> getListQuestions() {
         return listQuest.getSelectionModel();
@@ -294,45 +338,198 @@ public class ViewContructQuestionGame {
         return listQuestChoix.getSelectionModel();
     }
 
-    ///////////////////listener///////////
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //           CONFIG ALL LISTENERS          //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
+    //méthode de configuration de tous les groupes de listener et setOnAction
+    private void congigAllListener() {
+        configListener();
+        configSetOnAction();
+    }
+
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //                 LISTENNER               //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
+    //configuration de tous les listener
+    private void configListener() {
+        configListenerNbQuestChoix();
+        configLIstenerNomQuest();
+        configLIstenerNbPoints();
+        configLIstenerNbPointsDispo();
+        configListenernbPointsQuestSelect();
+        configListenerReponse1();
+        configListenerReponse2();
+        configListenerReponse3();
+        configListenerReponse4();
+        configListenerNumReponse();
+
+    }
+
+    //listener nombre de question dans la liste de questions choisi
     public void configListenerNbQuestChoix() {
         nbQuestChoix.addListener((observable, oldValue, newValue) -> {
             lbNbQuest.setText("Nombre de questions: " + newValue);
         });
     }
 
+    //listener nom de la question choisi
     public void configLIstenerNomQuest() {
         quest.addListener((observable, oldValue, newValue) -> {
             lbquestion.setText(newValue);
         });
     }
 
+    //listener nombre de points de la question choisi
     public void configLIstenerNbPoints() {
         nbPoints.addListener((observable, oldValue, newValue) -> {
             points.setText(newValue.toString() + " points");
         });
     }
 
+    //listener reponse 1 de la question choisi
+    public void configListenerReponse1() {
+        reponse1.addListener((observable, oldValue, newValue) -> {
+            rq1.setText(newValue);
+        });
+    }
+
+    //listener reponse 2 de la question choisi
+    public void configListenerReponse2() {
+        reponse2.addListener((observable, oldValue, newValue) -> {
+            rq2.setText(newValue);
+        });
+    }
+
+    //listener reponse 3 de la question choisi
+    public void configListenerReponse3() {
+        reponse3.addListener((observable, oldValue, newValue) -> {
+            rq3.setText(newValue);
+        });
+    }
+
+    //listener reponse 4 de la question choisi
+    public void configListenerReponse4() {
+        reponse4.addListener((observable, oldValue, newValue) -> {
+            rq4.setText(newValue);
+        });
+    }
+
+    //listener de la reponse correcte de la question choisi
+    public void configListenerNumReponse() {
+        numReponse.addListener((observable, oldValue, newValue) -> {
+            disableRadioButton();
+            unselectRadioButton();
+            switch (newValue.intValue()) {
+                case 1:
+                    rq1.setDisable(false);
+                    rq1.setSelected(true);
+                    break;
+                case 2:
+                    rq2.setDisable(false);
+                    rq2.setSelected(true);
+                    break;
+                case 3:
+                    rq3.setDisable(false);
+                    rq3.setSelected(true);
+                    break;
+                case 4:
+                    rq4.setDisable(false);
+                    rq4.setSelected(true);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+
+    //listener nombre de points disponible dans la liste des questions
     public void configLIstenerNbPointsDispo() {
         nbPointsDispo.addListener((observable, oldValue, newValue) -> {
             lbPointsDisp.setText("Points disponibles: " + newValue);
         });
     }
 
-    ///////////////set on action/////////
-    //ajoute une question dans la liste des questions selectionnées 
+    //listener du nombre de points dans la liste des questions choisi
+    public void configListenernbPointsQuestSelect() {
+        nbPointsQuestSelect.addListener((observable, oldValue, newValue) -> {
+            lbPointsQuest.setText("Points questionnaire: " + newValue + "/" + maxPoints);
+        });
+    }
+
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //           APPLICATION METHOD            //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
+    //configuration de tous les setOnAction
+    private void configSetOnAction() {
+        setOnActionRemoveQuest();
+        cancelOnActionAddQuest();
+        setOnActionAddQuest();
+    }
+
+    //ajoute une question dans la liste des questions selectionnées et la supprime de la liste des questions
     private void setOnActionAddQuest() {
         addQuest.setOnAction(e -> {
             viewModel.addQuest();
         });
 
     }
-    //retire une question dans la liste des questions choix selectionnées 
 
+    //retire une question dans la liste des questions choix selectionnées et l'ajoute dans la liste de question
     private void setOnActionRemoveQuest() {
         removeQuest.setOnAction(e -> {
             viewModel.removeQuest();
         });
+    }
 
+    //ferme la scene
+    private void cancelOnActionAddQuest() {
+        cancel.setOnAction(e -> {
+            stage.close();
+        });
+
+    }
+
+    //
+    //
+    /////////////////////////////////////////////
+    //                                         //
+    //          USEFUL METHOD FOR VIEW         //
+    //                                         //
+    /////////////////////////////////////////////
+    //
+    //
+    //desactive les reponses 
+    private void disableRadioButton() {
+        rq1.setDisable(true);
+        rq2.setDisable(true);
+        rq3.setDisable(true);
+        rq4.setDisable(true);
+
+    }
+
+    //deselectionne les reponses
+    private void unselectRadioButton() {
+        rq1.setSelected(false);
+        rq2.setSelected(false);
+        rq3.setSelected(false);
+        rq4.setSelected(false);
     }
 }

@@ -9,6 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ConstructGame;
 import model.ListTournament;
+import model.Player;
 import mvvm.ViewModel;
 import mvvm.ViewModelConstructQuest;
 import view.View;
@@ -24,7 +25,10 @@ public class Mediator {
 
     private final ListTournament lsTournament = new ListTournament();
 
-    private Mediator() {};
+    private Mediator() {
+    }
+
+    ;
     
         public static Mediator getInstance() {
         if (INSTANCE == null) {
@@ -39,13 +43,15 @@ public class Mediator {
         primaryStage.show();
     }
 
-    public void constructionPartie() {
-        Stage stage = new Stage();
-        ConstructGame newGame = new ConstructGame();
-        ViewModelConstructQuest viewConstruct = new ViewModelConstructQuest(newGame);
-        ViewContructQuestionGame view = new ViewContructQuestionGame(stage,viewConstruct);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+    public void constructionPartie(Player p1, Player p2) {
+        if (p1 != null && p2 != null) {
+            Stage stage = new Stage();
+            ConstructGame newGame = new ConstructGame(p1,p2);
+            ViewModelConstructQuest viewConstruct = new ViewModelConstructQuest(newGame);
+            ViewContructQuestionGame view = new ViewContructQuestionGame(stage, viewConstruct);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        }
     }
 
     public void viewAnswer() {
