@@ -58,7 +58,7 @@ public class ViewContructQuestionGame {
     private final RadioButton rq2 = new RadioButton();
     private final RadioButton rq3 = new RadioButton();
     private final RadioButton rq4 = new RadioButton();
-    final ToggleGroup group = new ToggleGroup();
+    private final ToggleGroup group = new ToggleGroup();
 
     private final IntegerProperty nbQuestChoix = new SimpleIntegerProperty();
     private final IntegerProperty nbPoints = new SimpleIntegerProperty();
@@ -504,6 +504,7 @@ public class ViewContructQuestionGame {
         cancel.setOnAction(e -> {
             stage.close();
         });
+        validate.setOnAction(e -> viewModel.startGame());
 
     }
 

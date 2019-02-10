@@ -5,15 +5,20 @@
  */
 package mediator;
 
+import javafx.collections.ObservableList;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ConstructGame;
+import model.Game;
 import model.ListTournament;
 import model.Player;
+import model.Question;
 import mvvm.ViewModel;
 import mvvm.ViewModelConstructQuest;
+import mvvm.ViewModelGame;
 import view.View;
 import view.ViewContructQuestionGame;
+import view.ViewGame;
 
 /**
  *
@@ -46,7 +51,7 @@ public class Mediator {
     public void constructionPartie(Player p1, Player p2) {
         if (p1 != null && p2 != null) {
             Stage stage = new Stage();
-            ConstructGame newGame = new ConstructGame(p1,p2);
+            ConstructGame newGame = new ConstructGame(p1, p2);
             ViewModelConstructQuest viewConstruct = new ViewModelConstructQuest(newGame);
             ViewContructQuestionGame view = new ViewContructQuestionGame(stage, viewConstruct);
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -54,9 +59,14 @@ public class Mediator {
         }
     }
 
-    public void viewAnswer() {
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+    public void playGame(Player p1, Player p2, ObservableList<Question> ls) {
+        if (p1 != null && p2 != null && ls.size() > 0) {
+            Stage stage = new Stage();
+            Game game = new Game(p1, p2, ls);
+            ViewModelGame viewModel = new ViewModelGame(game);
+            ViewGame view = new ViewGame(stage, viewModel);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        }
     }
 }

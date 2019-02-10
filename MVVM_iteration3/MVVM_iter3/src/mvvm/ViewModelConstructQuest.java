@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import mediator.Mediator;
 import model.ConstructGame;
 import model.Player;
 import model.Question;
@@ -259,5 +260,9 @@ public class ViewModelConstructQuest {
         reponse3.set("Reponse 3");
         reponse4.set("Reponse 4");
         numReponse.set(0);
+    }
+    
+    public void startGame(){
+        Mediator.getInstance().playGame(game.getPlayer1(),game.getPlayer2(),game.getListQuestionsChoix());
     }
 }
