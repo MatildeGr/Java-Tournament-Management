@@ -1,13 +1,14 @@
 package mvvm;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import mediator.Mediator;
 import model.ConstructGame;
 import model.Player;
 import model.Question;
@@ -35,10 +36,10 @@ public class ViewModelConstructQuest {
     private final StringProperty reponse1 = new SimpleStringProperty();
     private final StringProperty reponse2 = new SimpleStringProperty();
     private final StringProperty reponse3 = new SimpleStringProperty();
-    private final StringProperty reponse4 = new SimpleStringProperty();   
+    private final StringProperty reponse4 = new SimpleStringProperty();
 
-    
-
+    private final BooleanProperty close = new SimpleBooleanProperty(false);
+    private final  BooleanProperty cancel = new SimpleBooleanProperty(false);
     public ViewModelConstructQuest(ConstructGame newGame) {
         this.game = newGame;
         initData();
@@ -168,6 +169,16 @@ public class ViewModelConstructQuest {
         return nbPointsQuestSelect;
     }
 
+    //retourne si la stage doit etre ferme
+    public BooleanProperty closeProperty() {
+        return close;
+    }
+
+    //retourne si une partie est annulée
+    public BooleanProperty cancelProperty() {
+        return cancel;
+    }
+
     //
     //
     /////////////////////////////////////////////
@@ -229,17 +240,17 @@ public class ViewModelConstructQuest {
     public int getMaxPoints() {
         return game.getMaxPoint();
     }
-    
+
     //retourne joueur 1
-    public Player getPlayer1(){
+    public Player getPlayer1() {
         return game.getPlayer1();
     }
-    
+
     //retourne joueur 2
-    public Player getPlayer2(){
+    public Player getPlayer2() {
         return game.getPlayer2();
     }
-    
+
     //set tous les attributs d'une question
     private void setAffichageQuestion(Question q) {
         quest.set(q.getNom());
@@ -261,8 +272,19 @@ public class ViewModelConstructQuest {
         reponse4.set("Reponse 4");
         numReponse.set(0);
     }
+
+    public void endGame() {
+        if ((game.getPlayer1() != null && game.getPlayer2() != null && game.getListQuestionsChoix().size() > 0)) {
+            closeWindows();
+        }
+    }
+
+    //ferme la scene
+    private void closeWindows() {
+        close.set(true);
+    }
     
-    public void startGame(){
-        Mediator.getInstance().playGame(game.getPlayer1(),game.getPlayer2(),game.getListQuestionsChoix());
+    public void cancel(){
+        game.cancel();
     }
 }

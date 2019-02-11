@@ -1,18 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mediator;
 
-import javafx.collections.ObservableList;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ConstructGame;
 import model.Game;
 import model.ListTournament;
+import model.Match.Result;
 import model.Player;
-import model.Question;
 import mvvm.ViewModel;
 import mvvm.ViewModelConstructQuest;
 import mvvm.ViewModelGame;
@@ -30,10 +24,7 @@ public class Mediator {
 
     private final ListTournament lsTournament = new ListTournament();
 
-    private Mediator() {
-    }
-
-    ;
+    private Mediator() {};
     
         public static Mediator getInstance() {
         if (INSTANCE == null) {
@@ -48,25 +39,33 @@ public class Mediator {
         primaryStage.show();
     }
 
-    public void constructionPartie(Player p1, Player p2) {
-        if (p1 != null && p2 != null) {
+    
+    public Result partie(Player p1, Player p2){
+        Result res = null;
+        ConstructGame newGame = new ConstructGame(p1, p2);
+        constructionPartie(newGame);
+        if(!newGame.canceled()){
+            Game game = new Game(newGame);
+            playGame(game);
+            if(!game.canceled()){
+                res = game.result();
+            }
+        }
+        return res;
+    }
+    private void constructionPartie(ConstructGame newGame) {
             Stage stage = new Stage();
-            ConstructGame newGame = new ConstructGame(p1, p2);
             ViewModelConstructQuest viewConstruct = new ViewModelConstructQuest(newGame);
             ViewContructQuestionGame view = new ViewContructQuestionGame(stage, viewConstruct);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-        }
     }
 
-    public void playGame(Player p1, Player p2, ObservableList<Question> ls) {
-        if (p1 != null && p2 != null && ls.size() > 0) {
+    private void playGame(Game game) {
             Stage stage = new Stage();
-            Game game = new Game(p1, p2, ls);
             ViewModelGame viewModel = new ViewModelGame(game);
             ViewGame view = new ViewGame(stage, viewModel);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-        }
     }
 }

@@ -61,4 +61,7 @@
 .combo-box{
     -fx-background-color: #38424b;
 }
+.combo-box .cell:selected {
+    -fx-text-fill: white;
+}
 

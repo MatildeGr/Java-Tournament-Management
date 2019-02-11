@@ -8,12 +8,12 @@ import javafx.collections.ObservableList;
  * @author remy
  */
 public class ConstructGame {
-    
+
     private static final int GAMEMAXPOINTS = 15;
-    
+
     private final Player p1;
     private final Player p2;
-
+    private boolean canceled = false;
     private final ListQuestions lsQuestions = new ListQuestions();
     private final ObservableList<Question> lsQuestionsChoix = FXCollections.observableArrayList();
 
@@ -21,14 +21,14 @@ public class ConstructGame {
         this.p1 = p1;
         this.p2 = p2;
     }
-    
+
     //retourne le joueur 1
-    public Player getPlayer1(){
+    public Player getPlayer1() {
         return p1;
     }
-    
+
     //retourne le joueur 2
-    public Player getPlayer2(){
+    public Player getPlayer2() {
         return p2;
     }
 
@@ -68,11 +68,18 @@ public class ConstructGame {
     public int getPoints() {
         return lsQuestions.getPoints();
     }
-    
+
     //retourn le nombre de points maximum pour une partie
-    public int getMaxPoint(){
+    public int getMaxPoint() {
         return GAMEMAXPOINTS;
     }
-
+    //change l'état de la partie
+    public void cancel(){
+        canceled = true;
+    }
+    //retourne si une partie est annulée
+    public boolean canceled(){
+        return canceled;
+    }
 
 }

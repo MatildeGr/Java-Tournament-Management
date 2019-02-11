@@ -1,13 +1,16 @@
 package mvvm;
 
 import java.util.Optional;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import model.Game;
+import model.Match.Result;
 import model.Player;
 
 /**
@@ -17,8 +20,6 @@ import model.Player;
 public class ViewModelGame {
 
     private final Game game;
-    private final boolean end = false;
-
     private final IntegerProperty numQuest = new SimpleIntegerProperty(0);
     private final StringProperty quest = new SimpleStringProperty();
     private final IntegerProperty pointQuest = new SimpleIntegerProperty();
@@ -28,10 +29,12 @@ public class ViewModelGame {
     private final StringProperty reponse4 = new SimpleStringProperty();
     private final IntegerProperty pointsgagnes = new SimpleIntegerProperty();
     private final IntegerProperty numRepSelected = new SimpleIntegerProperty();
+    private final BooleanProperty close = new SimpleBooleanProperty(false);
+    private final  BooleanProperty cancel = new SimpleBooleanProperty(false);
 
     public ViewModelGame(Game game) {
         this.game = game;
-        setQuestion(0);
+        setQuestion(numQuest.get());
         configApplicativeLogic();
     }
 
@@ -96,6 +99,16 @@ public class ViewModelGame {
     public IntegerProperty numRepSelectedProperty() {
         return numRepSelected;
     }
+    
+    //retourne si la scene doit etre fermée
+    public BooleanProperty closeProperty(){
+        return close;
+    }
+    
+    //retourne si une partie est annulée
+    public BooleanProperty cancelProperty(){
+        return cancel;
+    }
 
     //
     //
@@ -125,6 +138,7 @@ public class ViewModelGame {
     public int getMaxPoint() {
         return game.getMaxPoint();
     }
+    
 
     //set une question 
     public void setQuestion(int index) {
@@ -159,18 +173,26 @@ public class ViewModelGame {
     //alert de fin de jeux, ajoute le resultat dans la liste des matchs
     private void endGame() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Demande de confirmation");
+        alert.setTitle("Fin de partie");
         alert.setHeaderText("Fin du match entre " + getPlayer1() + " et " + getPlayer2());
         if (pointsgagnes.get() > ((double) getMaxPoint()) / 2) {
+            game.result(Result.GAIN_JOUEUR2) ;
             alert.setContentText("Vous avez gagné");
         } else if (pointsgagnes.get() < ((double) getMaxPoint()) / 2) {
+            game.result(Result.GAIN_JOUEUR1);
             alert.setContentText(getPlayer1() + " à gagné");
         } else {
+            game.result(Result.MATCH_NULL);
             alert.setContentText("Vous avez fait match null");
         }
         Optional<ButtonType> action = alert.showAndWait();
         if (action.get() == ButtonType.OK || ButtonType.CANCEL == action.get()) {
-            //ferme fenetre et ajoute resultat a la liste des matchs
+            close.set(true);
         }
     }
+    
+    public void cancel(){
+        game.cancel();
+    }
+
 }

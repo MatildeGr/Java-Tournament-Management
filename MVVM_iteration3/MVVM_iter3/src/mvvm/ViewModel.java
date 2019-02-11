@@ -290,6 +290,17 @@ public class ViewModel {
             resetPlayersSelected();
         }
     }
+
+    //ajout d'un match dans un tournoi
+    public void addMatchByPartie(Result res) {
+        if (p1Selected.get() != null && p2Selected.get() != null && res != null && validatePosTournament()) {
+            Match m = new Match(p1Selected.get(), p2Selected.get(), res);
+            lsTournament.addMatch(numTournamentSelected.get(), m);
+            addListPlayerCombobox(numTournamentSelected.get());
+            clearCbValues();
+            resetPlayersSelected();
+        }
+    }
     //
     //
     /////////////////////////////////////////////
@@ -383,6 +394,9 @@ public class ViewModel {
     }
 
     public void constructionPartie() {
-        Mediator.getInstance().constructionPartie(p1Selected.get(), p2Selected.get());
+        if (p1Selected.get() != null && p2Selected.get() != null && numMatchSelected.get() < 0) {
+            Result res = Mediator.getInstance().partie(p1Selected.get(), p2Selected.get());
+            addMatchByPartie(res);
+        }
     }
 }

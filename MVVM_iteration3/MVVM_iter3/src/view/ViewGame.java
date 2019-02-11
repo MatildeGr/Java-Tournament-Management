@@ -1,7 +1,9 @@
 package view;
 
 import java.net.URL;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -28,6 +30,7 @@ import mvvm.ViewModelGame;
 public class ViewGame {
 
     private final ViewModelGame viewModel;
+    private final Stage stage;
     private final Label title = new Label();
     private final Label match = new Label();
     private final Label nbQuest = new Label();
@@ -60,9 +63,11 @@ public class ViewGame {
     private final StringProperty reponse4 = new SimpleStringProperty();
     private final IntegerProperty pointsgagnes = new SimpleIntegerProperty();
     private final IntegerProperty numRepSelected = new SimpleIntegerProperty();
+    private final BooleanProperty close = new SimpleBooleanProperty();
 
     public ViewGame(Stage stage, ViewModelGame viewModel) {
         this.viewModel = viewModel;
+        this.stage = stage;
         nbQuestion = viewModel.getNbQuest();
         maxPoint = viewModel.getMaxPoint();
         binding();
@@ -175,6 +180,7 @@ public class ViewGame {
         reponse4.bind(viewModel.reponse4Property());
         pointsgagnes.bind(viewModel.pointsGagnesProperty());
         numRepSelected.bindBidirectional(viewModel.numRepSelectedProperty());
+        close.bind(viewModel.closeProperty());
     }
 
     //
@@ -198,6 +204,7 @@ public class ViewGame {
         configListenerPointsGagnes();
         configListenerRepSelected();
         setOnActionconfirm();
+        closeWindows();
 
     }
 
@@ -283,6 +290,19 @@ public class ViewGame {
         confirm.setOnAction(e -> {
             viewModel.confirm();
         });
+        cancel.setOnAction(e -> {
+            viewModel.cancel();
+            stage.close();
+        });
 
+    }
+
+    //listener sur la fermeture de la stage
+    public void closeWindows() {
+        close.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                stage.close();
+            }
+        });
     }
 }

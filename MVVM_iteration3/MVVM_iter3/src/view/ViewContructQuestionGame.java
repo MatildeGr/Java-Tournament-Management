@@ -1,7 +1,9 @@
 package view;
 
 import java.net.URL;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -71,6 +73,8 @@ public class ViewContructQuestionGame {
     private final StringProperty reponse2 = new SimpleStringProperty();
     private final StringProperty reponse3 = new SimpleStringProperty();
     private final StringProperty reponse4 = new SimpleStringProperty();
+
+    private final BooleanProperty close = new SimpleBooleanProperty();
 
     public ViewContructQuestionGame(Stage stage, ViewModelConstructQuest viewModel) {
         this.viewModel = viewModel;
@@ -314,6 +318,7 @@ public class ViewContructQuestionGame {
 
     //binding points des listes
     private void bindPointsListView() {
+        close.bind(viewModel.closeProperty());
         nbPointsDispo.bind(viewModel.nbPointsDispoProperty());
         nbPointsQuestSelect.bind(viewModel.nbPointsQuestSelectProperty());
         nbQuestChoix.bind(viewModel.nbQuestChoix());
@@ -374,6 +379,7 @@ public class ViewContructQuestionGame {
         configListenerReponse3();
         configListenerReponse4();
         configListenerNumReponse();
+        closeWindows();
 
     }
 
@@ -468,6 +474,15 @@ public class ViewContructQuestionGame {
         });
     }
 
+    //listener sur la fermeture de la stage
+    public void closeWindows() {
+        close.addListener((observable, oldValue, newValue) -> {
+            if(newValue){
+                stage.close();
+            }
+        });
+    }
+
     //
     //
     /////////////////////////////////////////////
@@ -502,9 +517,12 @@ public class ViewContructQuestionGame {
     //ferme la scene
     private void cancelOnActionAddQuest() {
         cancel.setOnAction(e -> {
+            viewModel.cancel();
             stage.close();
         });
-        validate.setOnAction(e -> viewModel.startGame());
+        validate.setOnAction(e -> {
+            viewModel.endGame();
+        });
 
     }
 
