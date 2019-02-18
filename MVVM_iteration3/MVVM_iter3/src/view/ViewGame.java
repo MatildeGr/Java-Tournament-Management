@@ -29,6 +29,7 @@ import mvvm.ViewModelGame;
  */
 public class ViewGame {
 
+    private static final Insets INSETS = new Insets(0, 0, 30, 0);
     private final ViewModelGame viewModel;
     private final Stage stage;
     private final Label title = new Label();
@@ -108,6 +109,8 @@ public class ViewGame {
 
     private void configQuest() {
         quest.setText(question.get());
+        quest.setWrapText(true);
+        quest.setMaxWidth(200);
         questPoint.setText(pointQuest.get() + " points");
         quest.setAlignment(Pos.CENTER);
         questPoint.setAlignment(Pos.CENTER);
@@ -153,15 +156,16 @@ public class ViewGame {
     }
 
     private void configPaddingSpacing() {
-        hbTitle.setPadding(new Insets(0, 0, 30, 0));
-        hbMatch.setPadding(new Insets(0, 0, 30, 0));
+        hbTitle.setPadding(INSETS);
+        hbMatch.setPadding(INSETS);
         hbMatch.setSpacing(60);
-        vbQuest.setPadding(new Insets(0, 0, 30, 0));
+        vbQuest.setPadding(INSETS);
         vbQuest.setSpacing(40);
-        radioButton.setPadding(new Insets(0, 0, 30, 0));
+        radioButton.setPadding(INSETS);
         radioButton.setSpacing(20);
-        hbPoint.setPadding(new Insets(0, 0, 30, 0));
-        btn.setPadding(new Insets(0, 0, 30, 0));
+        hbPoint.setPadding(INSETS);
+        btn.setPadding(INSETS
+        );
         btn.setSpacing(20);
         root.setPadding(new Insets(20));
     }
@@ -287,14 +291,14 @@ public class ViewGame {
     }
 
     private void setOnActionconfirm() {
-        confirm.setOnAction(e -> {
-            viewModel.confirm();
-        });
+        confirm.setOnAction(e -> viewModel.confirm());
+
         cancel.setOnAction(e -> {
             viewModel.cancel();
             stage.close();
         });
 
+        stage.setOnCloseRequest(e -> viewModel.cancel());
     }
 
     //listener sur la fermeture de la stage

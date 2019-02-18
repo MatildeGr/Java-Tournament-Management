@@ -19,6 +19,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.Question;
 import mvvm.ViewModelConstructQuest;
@@ -158,12 +159,11 @@ public class ViewContructQuestionGame {
     }
 
     private void configLabelQuestion() {
-        lbquestion.setMaxWidth(200);
         lbquestion.setWrapText(true);
-        lbquestion.setText("Une question");
+        lbquestion.setMaxWidth(200);
         lbquestion.setAlignment(Pos.CENTER);
         lbquestion.setId("quest");
-        //lbquestion.setTextAlignment(TextAlignment.CENTER);
+        lbquestion.setTextAlignment(TextAlignment.CENTER);
     }
 
     private void configLabelPoints() {
@@ -172,7 +172,7 @@ public class ViewContructQuestionGame {
 
     private void configAddVBoxQuestionPoints() {
         question.setSpacing(SPACING60);
-        question.setPadding(new Insets(SPACING80, 0, 0, 0));
+        question.setPadding(new Insets(20, 0, 0, 0));
         question.setAlignment(Pos.CENTER);
         question.getChildren().addAll(lbquestion, points);
     }
@@ -477,7 +477,7 @@ public class ViewContructQuestionGame {
     //listener sur la fermeture de la stage
     public void closeWindows() {
         close.addListener((observable, oldValue, newValue) -> {
-            if(newValue){
+            if (newValue) {
                 stage.close();
             }
         });
@@ -520,9 +520,9 @@ public class ViewContructQuestionGame {
             viewModel.cancel();
             stage.close();
         });
-        validate.setOnAction(e -> {
-            viewModel.endGame();
-        });
+        validate.setOnAction(e -> viewModel.endGame());
+
+        stage.setOnCloseRequest(e -> viewModel.cancel());
 
     }
 
