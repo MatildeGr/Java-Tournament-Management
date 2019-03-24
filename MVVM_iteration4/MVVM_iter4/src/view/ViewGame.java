@@ -20,6 +20,8 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mvvm.ViewModelGame;
 
@@ -35,7 +37,7 @@ public class ViewGame {
     private final Label title = new Label();
     private final Label match = new Label();
     private final Label nbQuest = new Label();
-    private final Label quest = new Label();
+    private final Text quest = new Text();
     private final Label questPoint = new Label();
     private final Label reponse = new Label();
     private final RadioButton r1 = new RadioButton();
@@ -109,10 +111,12 @@ public class ViewGame {
 
     private void configQuest() {
         quest.setText(question.get());
-        quest.setWrapText(true);
-        quest.setMaxWidth(200);
+        quest.setWrappingWidth(200);
+        quest.setFill(Color.WHITE);
+        //quest.setWrapText(true);
+        //quest.setMaxWidth(200);
         questPoint.setText(pointQuest.get() + " points");
-        quest.setAlignment(Pos.CENTER);
+        //quest.setAlignment(Pos.CENTER);
         questPoint.setAlignment(Pos.CENTER);
         vbQuest.setAlignment(Pos.CENTER);
         vbQuest.getChildren().addAll(quest, questPoint);

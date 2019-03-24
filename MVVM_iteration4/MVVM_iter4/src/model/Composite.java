@@ -47,7 +47,7 @@ public class Composite extends Composant {
                 if(c.equals(category)){
                     return true;
                 }else{
-                    ((Composite)c).containCategory(category);
+                    return ((Composite)c).containCategory(category);
                 }
             }
         }
