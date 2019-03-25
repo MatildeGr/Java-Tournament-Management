@@ -36,6 +36,7 @@ public class ViewModelGame {
     private final BooleanProperty close = new SimpleBooleanProperty(false);
     private final BooleanProperty cancel = new SimpleBooleanProperty(false);
     private final BooleanProperty setVisibleHint = new SimpleBooleanProperty();
+    private final StringProperty hintText = new SimpleStringProperty();
 
     private final static int POINTTOHIND = 3;
 
@@ -50,6 +51,7 @@ public class ViewModelGame {
     //listener sur le numero de question
     private void configApplicativeLogic() {
         numQuest.addListener((o, old, newValue) -> dynamicEndGame());
+        //setHint(newValue.intValue());
     }
 
     //
@@ -134,6 +136,10 @@ public class ViewModelGame {
     //retourne si un joker peut être visible
     public BooleanProperty setVisibleHintProperty() {
         return setVisibleHint;
+    }
+    
+    public StringProperty hintTextProperty(){
+        return hintText;
     }
 
     //
@@ -220,8 +226,10 @@ public class ViewModelGame {
     private void setHint() {
         if (canHadHind()) {
             setVisibleHint(true);
+            //hintText.set(game.getQuestion(index).getHint());
         } else {
             setVisibleHint(false);
+            //hintText.set(" ");
         }
     }
 

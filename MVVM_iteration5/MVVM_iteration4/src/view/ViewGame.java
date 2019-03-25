@@ -5,6 +5,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -56,6 +58,7 @@ public class ViewGame {
 
     private final IntegerProperty numRepSelected = new SimpleIntegerProperty();
     private final BooleanProperty close = new SimpleBooleanProperty();
+    private final StringProperty textHint = new SimpleStringProperty();
 
     public ViewGame(Stage stage, ViewModelGame viewModel) {
         this.viewModel = viewModel;
@@ -101,7 +104,7 @@ public class ViewGame {
         hint.setText("Hint");
         hint.setAlignment(Pos.CENTER);
         vbQuest.setAlignment(Pos.CENTER);
-        vbQuest.getChildren().addAll(quest,hint,hintText, questPoint);
+        vbQuest.getChildren().addAll(quest, hint, hintText, questPoint);
     }
 
     private void configReponses() {
@@ -168,6 +171,7 @@ public class ViewGame {
         numRepSelected.bindBidirectional(viewModel.numRepSelectedProperty());
         close.bind(viewModel.closeProperty());
         hint.visibleProperty().bind(viewModel.setVisibleHintProperty());
+        textHint.bind(viewModel.hintTextProperty());
     }
 
     //
@@ -182,6 +186,7 @@ public class ViewGame {
     //méthode de configuration de tous les groupes de listener et setOnAction
     private void congigAllListener() {
         configListenerRepSelected();
+        setOnActionHint();
         setOnActionconfirm();
         closeWindows();
 
@@ -197,6 +202,13 @@ public class ViewGame {
     //
     //
 
+    //Listener de l'indice
+    public void configListenerHint() {
+        textHint.addListener((observable, oldValue, newValue) -> {
+            hintText.setText(newValue);
+        });
+    }
+
     public void configListenerRepSelected() {
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -208,7 +220,15 @@ public class ViewGame {
             }
         });
     }
-    
+
+    private void setOnActionHint() {
+        hint.setOnAction(e -> {
+            configListenerHint();
+            hintText.setFill(Color.WHITE);
+            hintText.setText(textHint.get());
+        });
+        
+    }
 
     private void setOnActionconfirm() {
         confirm.setOnAction(e -> viewModel.confirm());

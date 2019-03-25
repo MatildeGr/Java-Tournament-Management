@@ -72,13 +72,18 @@ public class Question extends Composant {
         return category;
     }
 
+    //renvoie le hint d'une question
+    public String getHint() {
+        return hint;
+    }
+
     @Override
     public String toString() {
         return getName();
     }
-    
+
     @Override
-    public List<Question> getQuestions(){
+    public List<Question> getQuestions() {
         List<Question> res = new ArrayList();
         res.add(this);
         return res;
