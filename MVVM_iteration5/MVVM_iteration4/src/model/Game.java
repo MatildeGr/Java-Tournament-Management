@@ -65,6 +65,9 @@ public class Game {
         return canceled;
     }
     
+    public String getHint(int index){
+        return ls.get(index).getHint();
+    }
     public int leftPoint(int pos){
         int res = 0;
         for (int i = pos; i < ls.size(); i++) {

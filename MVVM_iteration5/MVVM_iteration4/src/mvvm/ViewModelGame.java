@@ -32,11 +32,12 @@ public class ViewModelGame {
     private final BooleanProperty close = new SimpleBooleanProperty(false);
     private final BooleanProperty cancel = new SimpleBooleanProperty(false);
     private final BooleanProperty setVisibleHint = new SimpleBooleanProperty();
+    private final StringProperty hintText = new SimpleStringProperty();
 
     public ViewModelGame(Game game) {
         this.game = game;
         setQuestion(numQuest.get());
-        setHint();
+        setHint(numQuest.get());
         configApplicativeLogic();
     }
 
@@ -47,7 +48,7 @@ public class ViewModelGame {
                 endGame();
             } else {
                 setQuestion(newValue.intValue());
-                setHint();
+                setHint(newValue.intValue());
             }
         }
         );
@@ -120,6 +121,10 @@ public class ViewModelGame {
     //retourne si un joker peut être visible
     public BooleanProperty setVisibleHintProperty() {
         return setVisibleHint;
+    }
+    
+    public StringProperty hintTextProperty(){
+        return hintText;
     }
 
     //
@@ -208,13 +213,15 @@ public class ViewModelGame {
                 || pointsgagnes.get() > getMaxPoint() / 2);
     }
 
-    private void setHint() {
+    private void setHint(int index) {
         if (pointQuest.get() == 3) {
             setVisibleHint.set(false);
             setVisibleHint.set(true);
+            hintText.set(game.getQuestion(index).getHint());
         } else {
             setVisibleHint.set(true);
             setVisibleHint.set(false);
+            hintText.set(" ");
         }
     }
 
