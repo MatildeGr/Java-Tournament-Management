@@ -50,6 +50,8 @@ public class ViewGame {
     private final Button cancel = new Button();
     private final Separator s1 = new Separator();
     private final Separator s2 = new Separator();
+    private final Button hint = new Button();
+    private final Text hintText = new Text();
 
     private final VBox root = new VBox(), radioButton = new VBox(), vbQuest = new VBox();
     private final HBox btn = new HBox(), hbMatch = new HBox(), hbTitle = new HBox(), hbPoint = new HBox();
@@ -74,9 +76,9 @@ public class ViewGame {
         nbQuestion = viewModel.getNbQuest();
         maxPoint = viewModel.getMaxPoint();
         binding();
-        initView();
         congigAllListener();
-        Scene scene = new Scene(root, 350, 550);
+        initView();
+        Scene scene = new Scene(root, 350, 650);
         final URL buttonCSSURL = getClass().getResource("style.css");
         scene.getStylesheets().add(buttonCSSURL.toExternalForm());
         stage.setTitle("Réponses au questionnaire");
@@ -113,13 +115,12 @@ public class ViewGame {
         quest.setText(question.get());
         quest.setWrappingWidth(200);
         quest.setFill(Color.WHITE);
-        //quest.setWrapText(true);
-        //quest.setMaxWidth(200);
         questPoint.setText(pointQuest.get() + " points");
-        //quest.setAlignment(Pos.CENTER);
         questPoint.setAlignment(Pos.CENTER);
+        hint.setText("Hint");
+        hint.setAlignment(Pos.CENTER);
         vbQuest.setAlignment(Pos.CENTER);
-        vbQuest.getChildren().addAll(quest, questPoint);
+        vbQuest.getChildren().addAll(quest,hint,hintText, questPoint);
     }
 
     private void configReponses() {
@@ -189,6 +190,7 @@ public class ViewGame {
         pointsgagnes.bind(viewModel.pointsGagnesProperty());
         numRepSelected.bindBidirectional(viewModel.numRepSelectedProperty());
         close.bind(viewModel.closeProperty());
+        hint.visibleProperty().bind(viewModel.setVisibleHintProperty());
     }
 
     //
@@ -213,6 +215,7 @@ public class ViewGame {
         configListenerRepSelected();
         setOnActionconfirm();
         closeWindows();
+        //setVisibleHintListener();
 
     }
 
@@ -293,6 +296,7 @@ public class ViewGame {
             }
         });
     }
+    
 
     private void setOnActionconfirm() {
         confirm.setOnAction(e -> viewModel.confirm());

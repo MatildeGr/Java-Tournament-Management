@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -22,6 +23,8 @@ public abstract class Composant {
     public String getName(){
         return name;
     }
+    
+    public abstract List<Question> getQuestions();
     
     @Override
     public boolean equals(Object o){

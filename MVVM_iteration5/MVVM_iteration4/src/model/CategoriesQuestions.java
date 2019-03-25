@@ -5,7 +5,7 @@
  */
 package model;
 
-import elementSub.*;
+import element.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +23,7 @@ public final class CategoriesQuestions {
         Composite c = new Composite("All categories");
         map.put(c.getName(), c);
 
-        for (ElemWithSubElems e : ElemsWithSub.loadElemsFromFile("Questions.json")) {
+        for (Elem e : Elements.loadElemsFromFile("Questions.json")) {
             if (e.subElems != null) {
                 Composite comp = new Composite(e.name);
                 map.put(e.name, comp);
@@ -34,9 +34,9 @@ public final class CategoriesQuestions {
         return map;
     }
 
-    public static void categoryQuestion(Composite c, ElemWithSubElems subElem,Map<String, Composite> map) {
+    public static void categoryQuestion(Composite c, Elem subElem,Map<String, Composite> map) {
 
-        for (ElemWithSubElems e : subElem.subElems) {
+        for (Elem e : subElem.subElems) {
             if (e.subElems != null) {
                 Composite comp = new Composite(e.name);
                 map.put(e.name, comp);
@@ -47,7 +47,7 @@ public final class CategoriesQuestions {
                 for (String s : e.responses) {
                     ls.add(new Reponse(s));
                 }
-                c.add(new Question(e.name, e.points, ls, e.numCorrectResponse,c));
+                c.add(new Question(e.name, e.points, ls, e.numCorrectResponse,c,e.hint,e.fakeHint));
             }
         }
     }

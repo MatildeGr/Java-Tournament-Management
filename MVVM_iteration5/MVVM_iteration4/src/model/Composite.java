@@ -28,14 +28,11 @@ public class Composite extends Composant {
         ls.remove(c);
     }
 
+    @Override
     public ObservableList<Question> getQuestions() {
         ObservableList<Question> res = FXCollections.observableArrayList();
         for (Composant c : ls) {
-            if(c instanceof Question){
-                res.add((Question)c);
-            }else if(c instanceof Composite){
-                res.addAll(((Composite)c).getQuestions());
-            }       
+            res.addAll(c.getQuestions());     
         }
         return res;
     }
