@@ -65,6 +65,14 @@ public class Game {
         return canceled;
     }
     
+    public int leftPoint(int pos){
+        int res = 0;
+        for (int i = pos; i < ls.size(); i++) {
+            res += ls.get(i).getPoints();
+        }
+        return res;
+    }
+    
     //set le res
     public void result(Result r){
         res = r;

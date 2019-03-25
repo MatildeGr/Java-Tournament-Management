@@ -41,7 +41,11 @@ public class ViewModelGame {
     //listener sur le numero de question
     private void configApplicativeLogic() {
         numQuest.addListener((o, old, newValue) -> {
-            setQuestion(newValue.intValue());
+            if(stateForEndGame()){
+                endGame();
+            }else{
+                setQuestion(newValue.intValue());
+            }
         }
         );
     }
@@ -189,6 +193,11 @@ public class ViewModelGame {
         if (action.get() == ButtonType.OK || ButtonType.CANCEL == action.get()) {
             close.set(true);
         }
+    }
+    
+    private boolean stateForEndGame(){
+        return (pointsgagnes.get() + game.leftPoint(numQuest.get()) < getMaxPoint() / 2
+                    || pointsgagnes.get() > getMaxPoint() / 2);     
     }
     
     public void cancel(){
