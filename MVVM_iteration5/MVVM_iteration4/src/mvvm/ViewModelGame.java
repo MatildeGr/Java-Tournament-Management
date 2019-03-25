@@ -12,6 +12,7 @@ import javafx.scene.control.ButtonType;
 import model.Game;
 import model.Match.Result;
 import model.Player;
+import model.Question;
 
 /**
  *
@@ -20,37 +21,35 @@ import model.Player;
 public class ViewModelGame {
 
     private final Game game;
-    private final IntegerProperty numQuest = new SimpleIntegerProperty(0);
+    private final IntegerProperty numQuest = new SimpleIntegerProperty(-1);
+    private final StringProperty textPlayersMatch = new SimpleStringProperty();
     private final StringProperty quest = new SimpleStringProperty();
-    private final IntegerProperty pointQuest = new SimpleIntegerProperty();
+    private final StringProperty textNumQuest = new SimpleStringProperty();
+    private final StringProperty pointQuest = new SimpleStringProperty();
     private final StringProperty reponse1 = new SimpleStringProperty();
     private final StringProperty reponse2 = new SimpleStringProperty();
     private final StringProperty reponse3 = new SimpleStringProperty();
     private final StringProperty reponse4 = new SimpleStringProperty();
+    private final StringProperty textPointsgagnes = new SimpleStringProperty();
     private final IntegerProperty pointsgagnes = new SimpleIntegerProperty();
     private final IntegerProperty numRepSelected = new SimpleIntegerProperty();
     private final BooleanProperty close = new SimpleBooleanProperty(false);
     private final BooleanProperty cancel = new SimpleBooleanProperty(false);
     private final BooleanProperty setVisibleHint = new SimpleBooleanProperty();
 
+    private final static int POINTTOHIND = 3;
+
     public ViewModelGame(Game game) {
         this.game = game;
-        setQuestion(numQuest.get());
-        setHint();
+        setTextPlayersMatch();
+        nextQuestionOrEndGame();
+        setTextEarnedPoints();
         configApplicativeLogic();
     }
 
     //listener sur le numero de question
     private void configApplicativeLogic() {
-        numQuest.addListener((o, old, newValue) -> {
-            if (stateForEndGame()) {
-                endGame();
-            } else {
-                setQuestion(newValue.intValue());
-                setHint();
-            }
-        }
-        );
+        numQuest.addListener((o, old, newValue) -> dynamicEndGame());
     }
 
     //
@@ -67,14 +66,24 @@ public class ViewModelGame {
         return numQuest;
     }
 
+    //retourne le texte des joueurs participant au match
+    public StringProperty textPlayersMatchProperty() {
+        return textPlayersMatch;
+    }
+
     //retourne le nom de la question 
     public StringProperty questProperty() {
         return quest;
     }
 
     //retourne les points d'une question
-    public IntegerProperty pointQuestProperty() {
+    public StringProperty pointQuestProperty() {
         return pointQuest;
+    }
+
+    //retourne le texte du numero de la question en cours 
+    public StringProperty TextNumQuestProperty() {
+        return textNumQuest;
     }
 
     //retourne la reponse 1
@@ -100,6 +109,11 @@ public class ViewModelGame {
     //retourne les points gagnés
     public IntegerProperty pointsGagnesProperty() {
         return pointsgagnes;
+    }
+
+    //retourne le texte des points gagnés
+    public StringProperty textPointsgagnesProperty() {
+        return textPointsgagnes;
     }
 
     //retourne le numero de la reponse selectionnée
@@ -141,42 +155,24 @@ public class ViewModelGame {
         return game.getPlayer2();
     }
 
-    //retourne le nombre de question 
-    public int getNbQuest() {
-        return game.getNbQuest();
-    }
-
     //retourne le nombre de points du max du questionnaire
     public int getMaxPoint() {
         return game.getMaxPoint();
     }
 
-    //set une question 
-    public void setQuestion(int index) {
-        quest.set(game.getQuestion(index).getNom());
-        pointQuest.set(game.getQuestion(index).getPoints());
-        reponse1.set(game.getQuestion(index).getReponseToString(0));
-        reponse2.set(game.getQuestion(index).getReponseToString(1));
-        reponse3.set(game.getQuestion(index).getReponseToString(2));
-        reponse4.set(game.getQuestion(index).getReponseToString(3));
-
-    }
-
     //confirme une reponse, ajoute les points si reponse juste 
     //ferme la page si confirm et fin de qestionnaire
     public void confirm() {
-        if (numRepSelected.get() == game.getQuestion(numQuest.get()).getNumRep()) {
-            pointsgagnes.set(pointsgagnes.get() + pointQuest.get());
-            nextQuestionOrEndGame();
-        } else {
-            nextQuestionOrEndGame();
+        if (matchQuestionAnswer()) {
+            addEarnedPoints();
         }
+        nextQuestionOrEndGame();
     }
 
     //increment le numero de question ou termine le jeux
     private void nextQuestionOrEndGame() {
-        if (numQuest.get() < getNbQuest() - 1) {
-            numQuest.set(numQuest.get() + 1);
+        if (canNextQuestion()) {
+            nextQuestion();
         } else {
             endGame();
         }
@@ -203,23 +199,80 @@ public class ViewModelGame {
         }
     }
 
+    //set une question 
+    private void setQuestion(int index) {
+        Question q = game.getQuestion(index);
+        quest.set(q.getNom());
+        pointQuest.set(q.getPoints() + "points");
+        reponse1.set(q.getReponseToString(0));
+        reponse2.set(q.getReponseToString(1));
+        reponse3.set(q.getReponseToString(2));
+        reponse4.set(q.getReponseToString(3));
+        setHint();
+
+    }
+
     private boolean stateForEndGame() {
         return (pointsgagnes.get() + game.leftPoint(numQuest.get()) < getMaxPoint() / 2
                 || pointsgagnes.get() > getMaxPoint() / 2);
     }
 
     private void setHint() {
-        if (pointQuest.get() == 3) {
-            setVisibleHint.set(false);
-            setVisibleHint.set(true);
+        if (canHadHind()) {
+            setVisibleHint(true);
         } else {
-            setVisibleHint.set(true);
-            setVisibleHint.set(false);
+            setVisibleHint(false);
         }
+    }
+
+    private boolean canHadHind() {
+        return game.getQuestion(numQuest.get()).getPoints() == POINTTOHIND;
     }
 
     public void cancel() {
         game.cancel();
+    }
+
+    private boolean canNextQuestion() {
+        return numQuest.get() < game.getNbQuest() - 1;
+    }
+
+    private void nextQuestion() {
+        numQuest.set(numQuest.get() + 1);
+        setTextNumCurrentQuestion();
+        setQuestion(numQuest.get());
+    }
+
+    private void setTextNumCurrentQuestion() {
+        textNumQuest.set((numQuest.get() + 1) + " / " + game.getNbQuest());
+    }
+
+    private boolean matchQuestionAnswer() {
+        return numRepSelected.get() == game.getQuestion(numQuest.get()).getNumRep();
+    }
+
+    private void addEarnedPoints() {
+        pointsgagnes.set(pointsgagnes.get() + game.getQuestion(numQuest.get()).getPoints());
+        setTextEarnedPoints();
+    }
+
+    private void setTextEarnedPoints() {
+        textPointsgagnes.set("Points gagnés " + pointsgagnes.get() + "/" + game.getMaxPoint());
+    }
+
+    private void dynamicEndGame() {
+        if (stateForEndGame()) {
+            endGame();
+        }
+    }
+
+    private void setTextPlayersMatch() {
+        textPlayersMatch.set("Match : " + getPlayer1() + " - " + getPlayer2());
+    }
+
+    private void setVisibleHint(boolean b) {
+        setVisibleHint.set(!b);
+        setVisibleHint.set(b);
     }
 
 }

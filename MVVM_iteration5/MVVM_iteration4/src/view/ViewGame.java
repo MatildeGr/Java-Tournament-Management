@@ -5,8 +5,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -56,29 +54,16 @@ public class ViewGame {
     private final VBox root = new VBox(), radioButton = new VBox(), vbQuest = new VBox();
     private final HBox btn = new HBox(), hbMatch = new HBox(), hbTitle = new HBox(), hbPoint = new HBox();
 
-    private final int nbQuestion;
-    private final int maxPoint;
-
-    private final IntegerProperty numQuest = new SimpleIntegerProperty();
-    private final StringProperty question = new SimpleStringProperty();
-    private final IntegerProperty pointQuest = new SimpleIntegerProperty();
-    private final StringProperty reponse1 = new SimpleStringProperty();
-    private final StringProperty reponse2 = new SimpleStringProperty();
-    private final StringProperty reponse3 = new SimpleStringProperty();
-    private final StringProperty reponse4 = new SimpleStringProperty();
-    private final IntegerProperty pointsgagnes = new SimpleIntegerProperty();
     private final IntegerProperty numRepSelected = new SimpleIntegerProperty();
     private final BooleanProperty close = new SimpleBooleanProperty();
 
     public ViewGame(Stage stage, ViewModelGame viewModel) {
         this.viewModel = viewModel;
         this.stage = stage;
-        nbQuestion = viewModel.getNbQuest();
-        maxPoint = viewModel.getMaxPoint();
         binding();
         congigAllListener();
         initView();
-        Scene scene = new Scene(root, 350, 650);
+        Scene scene = new Scene(root, 350, 750);
         final URL buttonCSSURL = getClass().getResource("style.css");
         scene.getStylesheets().add(buttonCSSURL.toExternalForm());
         stage.setTitle("Réponses au questionnaire");
@@ -105,17 +90,13 @@ public class ViewGame {
     }
 
     private void configMatch() {
-        match.setText("Match : " + viewModel.getPlayer1() + " - " + viewModel.getPlayer2());
-        nbQuest.setText("1/" + nbQuestion);
         hbMatch.setAlignment(Pos.CENTER);
         hbMatch.getChildren().addAll(match, nbQuest);
     }
 
     private void configQuest() {
-        quest.setText(question.get());
         quest.setWrappingWidth(200);
         quest.setFill(Color.WHITE);
-        questPoint.setText(pointQuest.get() + " points");
         questPoint.setAlignment(Pos.CENTER);
         hint.setText("Hint");
         hint.setAlignment(Pos.CENTER);
@@ -126,16 +107,12 @@ public class ViewGame {
     private void configReponses() {
         reponse.setText("Réponses");
         reponse.setAlignment(Pos.CENTER);
-        r1.setText(reponse1.get());
         r1.setToggleGroup(group);
         r1.setUserData(1);
-        r2.setText(reponse2.get());
         r2.setToggleGroup(group);
         r2.setUserData(2);
-        r3.setText(reponse3.get());
         r3.setToggleGroup(group);
         r3.setUserData(3);
-        r4.setText(reponse4.get());
         r4.setToggleGroup(group);
         r4.setUserData(4);
         radioButton.setSpacing(10);
@@ -147,7 +124,6 @@ public class ViewGame {
     }
 
     private void configPointsGagne() {
-        pointGagne.setText("Points gagnés 0/" + maxPoint);
         pointGagne.setAlignment(Pos.CENTER);
         hbPoint.setAlignment(Pos.CENTER);
         hbPoint.getChildren().addAll(pointGagne);
@@ -180,14 +156,15 @@ public class ViewGame {
     }
 
     private void binding() {
-        numQuest.bind(viewModel.numQuestProperty());
-        question.bind(viewModel.questProperty());
-        pointQuest.bind(viewModel.pointQuestProperty());
-        reponse1.bind(viewModel.reponse1Property());
-        reponse2.bind(viewModel.reponse2Property());
-        reponse3.bind(viewModel.reponse3Property());
-        reponse4.bind(viewModel.reponse4Property());
-        pointsgagnes.bind(viewModel.pointsGagnesProperty());
+        match.textProperty().bind(viewModel.textPlayersMatchProperty());
+        quest.textProperty().bind(viewModel.questProperty());
+        nbQuest.textProperty().bind(viewModel.TextNumQuestProperty());
+        questPoint.textProperty().bind(viewModel.pointQuestProperty());
+        pointGagne.textProperty().bind(viewModel.textPointsgagnesProperty());
+        r1.textProperty().bind(viewModel.reponse1Property());
+        r2.textProperty().bind(viewModel.reponse2Property());
+        r3.textProperty().bind(viewModel.reponse3Property());
+        r4.textProperty().bind(viewModel.reponse4Property());
         numRepSelected.bindBidirectional(viewModel.numRepSelectedProperty());
         close.bind(viewModel.closeProperty());
         hint.visibleProperty().bind(viewModel.setVisibleHintProperty());
@@ -204,18 +181,9 @@ public class ViewGame {
     //
     //méthode de configuration de tous les groupes de listener et setOnAction
     private void congigAllListener() {
-        configListenernumQuest();
-        configListenerQuest();
-        configListenerPointQuest();
-        configListenerReponse1();
-        configListenerReponse2();
-        configListenerReponse3();
-        configListenerReponse4();
-        configListenerPointsGagnes();
         configListenerRepSelected();
         setOnActionconfirm();
         closeWindows();
-        //setVisibleHintListener();
 
     }
 
@@ -228,62 +196,6 @@ public class ViewGame {
     /////////////////////////////////////////////
     //
     //
-    //listener sur le numero de question
-    public void configListenernumQuest() {
-        numQuest.addListener((observable, oldValue, newValue) -> {
-            int val = newValue.intValue() + 1;
-            nbQuest.setText(val + "/" + nbQuestion);
-        });
-    }
-
-    //listener nom de question
-    public void configListenerQuest() {
-        question.addListener((observable, oldValue, newValue) -> {
-            quest.setText(newValue);
-        });
-    }
-
-    //listener point question
-    public void configListenerPointQuest() {
-        pointQuest.addListener((observable, oldValue, newValue) -> {
-            questPoint.setText(newValue + " Points");
-        });
-    }
-
-    //listener reponse1
-    public void configListenerReponse1() {
-        reponse1.addListener((observable, oldValue, newValue) -> {
-            r1.setText(newValue);
-        });
-    }
-
-    //listener reponse2
-    public void configListenerReponse2() {
-        reponse2.addListener((observable, oldValue, newValue) -> {
-            r2.setText(newValue);
-        });
-    }
-
-    //listener reponse3
-    public void configListenerReponse3() {
-        reponse3.addListener((observable, oldValue, newValue) -> {
-            r3.setText(newValue);
-        });
-    }
-
-    //listener reponse4
-    public void configListenerReponse4() {
-        reponse4.addListener((observable, oldValue, newValue) -> {
-            r4.setText(newValue);
-        });
-    }
-
-    //listener des points gagnés
-    public void configListenerPointsGagnes() {
-        pointsgagnes.addListener((observable, oldValue, newValue) -> {
-            pointGagne.setText("Points gagnés " + newValue + "/" + maxPoint);
-        });
-    }
 
     public void configListenerRepSelected() {
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
