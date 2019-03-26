@@ -186,6 +186,7 @@ public class ViewGame {
     //méthode de configuration de tous les groupes de listener et setOnAction
     private void congigAllListener() {
         configListenerRepSelected();
+        //configListenerHint();
         setOnActionHint();
         setOnActionconfirm();
         closeWindows();
@@ -205,6 +206,7 @@ public class ViewGame {
     //Listener de l'indice
     public void configListenerHint() {
         textHint.addListener((observable, oldValue, newValue) -> {
+            System.out.println("Listener qui affiche... ");
             hintText.setText(newValue);
         });
     }

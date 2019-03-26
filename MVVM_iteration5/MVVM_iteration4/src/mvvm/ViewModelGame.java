@@ -51,7 +51,6 @@ public class ViewModelGame {
     //listener sur le numero de question
     private void configApplicativeLogic() {
         numQuest.addListener((o, old, newValue) -> dynamicEndGame());
-        //setHint(newValue.intValue());
     }
 
     //
@@ -137,8 +136,9 @@ public class ViewModelGame {
     public BooleanProperty setVisibleHintProperty() {
         return setVisibleHint;
     }
-    
-    public StringProperty hintTextProperty(){
+
+    //renvoie le texte de l'indice. 
+    public StringProperty hintTextProperty() {
         return hintText;
     }
 
@@ -226,11 +226,15 @@ public class ViewModelGame {
     private void setHint() {
         if (canHadHind()) {
             setVisibleHint(true);
-            //hintText.set(game.getQuestion(index).getHint());
+           
         } else {
             setVisibleHint(false);
-            //hintText.set(" ");
-        }
+        } 
+        setTextHint();
+    }
+
+    public void setTextHint() {
+        hintText.set(game.getQuestion(numQuest.get()).getHint());
     }
 
     private boolean canHadHind() {
