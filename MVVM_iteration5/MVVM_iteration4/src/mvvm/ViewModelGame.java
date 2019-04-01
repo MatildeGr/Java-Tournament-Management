@@ -37,7 +37,11 @@ public class ViewModelGame {
     private final BooleanProperty cancel = new SimpleBooleanProperty(false);
     private final BooleanProperty setVisibleHint = new SimpleBooleanProperty();
     private final StringProperty hintText = new SimpleStringProperty();
-
+    private boolean hintselected = false;
+    
+    private final static int POINT_TO_REMOVE_IF_HINT = 2;
+    private final static int POINT_TO_REMOVE_IF_FAKEHINT = 1;
+    private final static int POINT_TO_REMOVE_IF_NOT_HINT = 0;
     private final static int POINTTOHIND = 3;
 
     public ViewModelGame(Game game) {
@@ -226,19 +230,20 @@ public class ViewModelGame {
     private void setHint() {
         if (canHadHind()) {
             setVisibleHint(true);
-           
+
         } else {
             setVisibleHint(false);
-        } 
-        setTextHint();
+        }
     }
 
     public void setTextHint() {
-        hintText.set(game.getQuestion(numQuest.get()).getHint());
+        setVisibleHint(false);
+        hintselected = true;
+        hintText.set(currentQuestion().getHint());
     }
 
     private boolean canHadHind() {
-        return game.getQuestion(numQuest.get()).getPoints() == POINTTOHIND;
+        return currentQuestion().getPoints() == POINTTOHIND;
     }
 
     public void cancel() {
@@ -250,6 +255,7 @@ public class ViewModelGame {
     }
 
     private void nextQuestion() {
+        clearHint();
         numQuest.set(numQuest.get() + 1);
         setTextNumCurrentQuestion();
         setQuestion(numQuest.get());
@@ -260,12 +266,25 @@ public class ViewModelGame {
     }
 
     private boolean matchQuestionAnswer() {
-        return numRepSelected.get() == game.getQuestion(numQuest.get()).getNumRep();
+        return numRepSelected.get() == currentQuestion().getNumRep();
     }
 
     private void addEarnedPoints() {
-        pointsgagnes.set(pointsgagnes.get() + game.getQuestion(numQuest.get()).getPoints());
+        if (hintselected) {
+            if (!isFakeHint()) {
+                minusPoint(POINT_TO_REMOVE_IF_HINT);
+            } else {
+                minusPoint(POINT_TO_REMOVE_IF_FAKEHINT);
+            }
+        } else {
+            minusPoint(POINT_TO_REMOVE_IF_NOT_HINT);
+        }
         setTextEarnedPoints();
+        hintselected = false;
+    }
+
+    private void minusPoint(int point) {
+        pointsgagnes.set(pointsgagnes.get() + currentQuestion().getPoints() - point);
     }
 
     private void setTextEarnedPoints() {
@@ -285,6 +304,19 @@ public class ViewModelGame {
     private void setVisibleHint(boolean b) {
         setVisibleHint.set(!b);
         setVisibleHint.set(b);
+    }
+
+    private void clearHint() {
+        hintText.set(null);
+    }
+
+    //renvoie true si un l'indice est faux. 
+    private boolean isFakeHint() {
+        return currentQuestion().getIsFake();
+    }
+    
+    private Question currentQuestion(){
+        return game.getQuestion(numQuest.get());
     }
 
 }

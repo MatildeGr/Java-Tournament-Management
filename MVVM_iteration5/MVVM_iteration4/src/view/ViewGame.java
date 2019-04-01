@@ -5,8 +5,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -58,7 +56,6 @@ public class ViewGame {
 
     private final IntegerProperty numRepSelected = new SimpleIntegerProperty();
     private final BooleanProperty close = new SimpleBooleanProperty();
-    private final StringProperty textHint = new SimpleStringProperty();
 
     public ViewGame(Stage stage, ViewModelGame viewModel) {
         this.viewModel = viewModel;
@@ -103,6 +100,7 @@ public class ViewGame {
         questPoint.setAlignment(Pos.CENTER);
         hint.setText("Hint");
         hint.setAlignment(Pos.CENTER);
+        hintText.setFill(Color.WHITE);
         vbQuest.setAlignment(Pos.CENTER);
         vbQuest.getChildren().addAll(quest, hint, hintText, questPoint);
     }
@@ -171,7 +169,7 @@ public class ViewGame {
         numRepSelected.bindBidirectional(viewModel.numRepSelectedProperty());
         close.bind(viewModel.closeProperty());
         hint.visibleProperty().bind(viewModel.setVisibleHintProperty());
-        textHint.bind(viewModel.hintTextProperty());
+        hintText.textProperty().bind(viewModel.hintTextProperty());
     }
 
     //
@@ -186,7 +184,6 @@ public class ViewGame {
     //méthode de configuration de tous les groupes de listener et setOnAction
     private void congigAllListener() {
         configListenerRepSelected();
-        //configListenerHint();
         setOnActionHint();
         setOnActionconfirm();
         closeWindows();
@@ -203,14 +200,6 @@ public class ViewGame {
     //
     //
 
-    //Listener de l'indice
-    public void configListenerHint() {
-        textHint.addListener((observable, oldValue, newValue) -> {
-            System.out.println("Listener qui affiche... ");
-            hintText.setText(newValue);
-        });
-    }
-
     public void configListenerRepSelected() {
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -225,11 +214,9 @@ public class ViewGame {
 
     private void setOnActionHint() {
         hint.setOnAction(e -> {
-            configListenerHint();
-            hintText.setFill(Color.WHITE);
-            hintText.setText(textHint.get());
+            viewModel.setTextHint();
         });
-        
+
     }
 
     private void setOnActionconfirm() {

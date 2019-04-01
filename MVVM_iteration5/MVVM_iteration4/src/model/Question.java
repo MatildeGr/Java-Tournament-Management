@@ -13,18 +13,19 @@ public class Question extends Composant {
     private final List<Reponse> reponses;
     private final int numCorrectReponse;
     private final Composant category;
-    private final String fakeHint;
     private final String hint;
+    private final boolean isFake;
 
     public Question(String nom, int points, List<Reponse> reponses, int numRep, Composant category,
-            String hint, String fakeHint) {
+            String hint, boolean isfake) {
         super(nom);
         this.points = points;
         this.reponses = reponses;
         this.numCorrectReponse = numRep;
         this.category = category;
         this.hint = hint;
-        this.fakeHint = fakeHint;
+        this.isFake = isfake;
+
     }
 
     //retourne le nom d'une reponse
@@ -55,6 +56,11 @@ public class Question extends Composant {
     //retourne le numero de la reponse juste
     public int getNumRep() {
         return numCorrectReponse;
+    }
+
+    //Renvoie vrai si l'indice est un faux.
+    public boolean getIsFake() {
+        return isFake;
     }
 
     //ajoute la question de sa category
