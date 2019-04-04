@@ -13,6 +13,7 @@ import mvvm.ViewModelGame;
 import view.View;
 import view.ViewContructQuestionGame;
 import view.ViewGame;
+import view.ViewText;
 
 /**
  *
@@ -24,7 +25,10 @@ public class Mediator {
 
     private final ListTournament lsTournament = new ListTournament();
 
-    private Mediator() {};
+    private Mediator() {
+    }
+
+    ;
     
         public static Mediator getInstance() {
         if (INSTANCE == null) {
@@ -34,38 +38,46 @@ public class Mediator {
     }
 
     public void managerView(Stage primaryStage) {
+        imageStart();
         ViewModel viewModel = new ViewModel(lsTournament);
         View view = new View(primaryStage, viewModel);
         primaryStage.show();
     }
 
-    
-    public Result partie(Player p1, Player p2){
+    public Result partie(Player p1, Player p2) {
         Result res = null;
         ConstructGame newGame = new ConstructGame(p1, p2);
         constructionPartie(newGame);
-        if(!newGame.canceled()){
+        if (!newGame.canceled()) {
             Game game = new Game(newGame);
             playGame(game);
-            if(!game.canceled()){
+            if (!game.canceled()) {
                 res = game.result();
             }
         }
         return res;
     }
+
+    private void imageStart() {
+        Stage stage = new Stage();
+        ViewText view = new ViewText(stage);
+        //stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+    }
+
     private void constructionPartie(ConstructGame newGame) {
-            Stage stage = new Stage();
-            ViewModelConstructQuest viewConstruct = new ViewModelConstructQuest(newGame);
-            ViewContructQuestionGame view = new ViewContructQuestionGame(stage, viewConstruct);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
+        Stage stage = new Stage();
+        ViewModelConstructQuest viewConstruct = new ViewModelConstructQuest(newGame);
+        ViewContructQuestionGame view = new ViewContructQuestionGame(stage, viewConstruct);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
     }
 
     private void playGame(Game game) {
-            Stage stage = new Stage();
-            ViewModelGame viewModel = new ViewModelGame(game);
-            ViewGame view = new ViewGame(stage, viewModel);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
+        Stage stage = new Stage();
+        ViewModelGame viewModel = new ViewModelGame(game);
+        ViewGame view = new ViewGame(stage, viewModel);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
     }
 }
