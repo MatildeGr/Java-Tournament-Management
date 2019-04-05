@@ -27,6 +27,10 @@ public class Question extends Composant {
         this.isFake = isfake;
 
     }
+    
+    public Question(Question quest){
+        this(quest.getNom(),quest.points,quest.reponses,quest.numCorrectReponse,quest.category,quest.hint,quest.isFake);
+    }
 
     //retourne le nom d'une reponse
     public String getNom() {

@@ -8,7 +8,7 @@ import model.Question;
  */
 public class Building {
 
-    private Question question;
+    protected static Question question;
 
     public Building(Question quest) {
         _setQuest(quest);
