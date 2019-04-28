@@ -17,5 +17,9 @@ public class Building {
     private void _setQuest(Question question) {
         this.question = question;
     }
+    
+    public void readQuestion(Question question){
+        
+    }
 
 }

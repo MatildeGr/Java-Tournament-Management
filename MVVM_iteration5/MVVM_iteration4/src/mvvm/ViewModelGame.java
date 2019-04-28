@@ -13,6 +13,8 @@ import model.Game;
 import model.Match.Result;
 import model.Player;
 import model.Question;
+import undoableBuilding.MementoBuilding;
+import undoableBuilding.UndoableBuilding;
 
 /**
  *
@@ -36,9 +38,11 @@ public class ViewModelGame {
     private final BooleanProperty close = new SimpleBooleanProperty(false);
     private final BooleanProperty cancel = new SimpleBooleanProperty(false);
     private final BooleanProperty setVisibleHint = new SimpleBooleanProperty();
+    private final BooleanProperty setGoBack = new SimpleBooleanProperty();
     private final StringProperty hintText = new SimpleStringProperty();
     private boolean hintselected = false;
-    
+    private boolean firstBadAnswer = true;
+
     private final static int POINT_TO_REMOVE_IF_HINT = 2;
     private final static int POINT_TO_REMOVE_IF_FAKEHINT = 1;
     private final static int POINT_TO_REMOVE_IF_NOT_HINT = 0;
@@ -146,6 +150,11 @@ public class ViewModelGame {
         return hintText;
     }
 
+    //renvoie si le boutton revenir en arrière peut etre visible
+    public BooleanProperty setGoBackProperty() {
+        return setGoBack;
+    }
+
     //
     //
     /////////////////////////////////////////////
@@ -171,12 +180,28 @@ public class ViewModelGame {
     }
 
     //confirme une reponse, ajoute les points si reponse juste 
+    //Créer le memento si première mauvaise réponse. 
+    //Ajoute question au memento lorsque réponse fausse.
     //ferme la page si confirm et fin de qestionnaire
     public void confirm() {
         if (matchQuestionAnswer()) {
             addEarnedPoints();
+        } else {
+            if (firstBadAnswer) {
+                UndoableBuilding building = new MementoBuilding(game.getQuestion(numQuest.get()));
+                firstBadAnswer = false;
+            }
+            else{
+                //building.
+            }
         }
         nextQuestionOrEndGame();
+    }
+
+    public void goBack() {
+        if (firstBadAnswer && !matchQuestionAnswer()) {
+            //building.undo();
+        }
     }
 
     //increment le numero de question ou termine le jeux
@@ -314,8 +339,8 @@ public class ViewModelGame {
     private boolean isFakeHint() {
         return currentQuestion().getIsFake();
     }
-    
-    private Question currentQuestion(){
+
+    private Question currentQuestion() {
         return game.getQuestion(numQuest.get());
     }
 

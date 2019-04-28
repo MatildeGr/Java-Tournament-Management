@@ -46,6 +46,7 @@ public class ViewGame {
     private final Label pointGagne = new Label();
     private final Button confirm = new Button();
     private final Button cancel = new Button();
+    private final Button goBack = new Button();
     private final Separator s1 = new Separator();
     private final Separator s2 = new Separator();
     private final Button hint = new Button();
@@ -133,8 +134,9 @@ public class ViewGame {
     private void configButton() {
         confirm.setText("Validé");
         cancel.setText("Annuler");
+        goBack.setText("Revenir en arrière");
         btn.setAlignment(Pos.CENTER);
-        btn.getChildren().addAll(confirm, cancel);
+        btn.getChildren().addAll(confirm, cancel, goBack);
     }
 
     private void configPaddingSpacing() {
@@ -199,7 +201,6 @@ public class ViewGame {
     /////////////////////////////////////////////
     //
     //
-
     public void configListenerRepSelected() {
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -226,6 +227,8 @@ public class ViewGame {
             viewModel.cancel();
             stage.close();
         });
+
+        goBack.setOnAction(e -> viewModel.goBack());
 
         stage.setOnCloseRequest(e -> viewModel.cancel());
     }

@@ -24,7 +24,7 @@ public class MementoBuilding extends UndoableBuilding {
 
     @Override
     public void undo() {
-       // System.out.println("Retour en arrière :");
+       System.out.println("Retour en arrière :");
         setMemento(careTaker.getMemento());
     }
 
