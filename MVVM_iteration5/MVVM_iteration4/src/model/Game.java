@@ -14,11 +14,17 @@ public class Game {
     private final ObservableList<Question> ls;
     private boolean canceled = false;
     private Result res;
+    private Question currentQuestion;
+    private ConstructGame constructGame;
 
     public Game(ConstructGame game) {
         this.p1 = game.getPlayer1();
         this.p2 = game.getPlayer2();
         this.ls = game.getListQuestionsChoix();
+    }
+
+    public ConstructGame getConstrucGame() {
+        return constructGame;
     }
 
     //retourne le joueur 1
@@ -38,7 +44,8 @@ public class Game {
 
     //retourne une question a une position donnéé
     public Question getQuestion(int index) {
-        return ls.get(index);
+        currentQuestion = ls.get(index);
+        return currentQuestion;
     }
 
     //retourne le nombre de points maximum de la liste des questions
@@ -64,24 +71,34 @@ public class Game {
     public boolean canceled() {
         return canceled;
     }
-    
-    public String getHint(int index){
+
+    public String getHint(int index) {
         return ls.get(index).getHint();
     }
-    public int leftPoint(int pos){
+
+    public int leftPoint(int pos) {
         int res = 0;
         for (int i = pos; i < ls.size(); i++) {
             res += ls.get(i).getPoints();
         }
         return res;
     }
-    
+
     //set le res
-    public void result(Result r){
+    public void result(Result r) {
         res = r;
     }
-    public Result result(){
+
+    public Result result() {
         return res;
+    }
+
+    public Question getCurrentQuestion() {
+            return currentQuestion;
+    }
+
+    public void setCurrentQuestion(Question quest) {
+        currentQuestion = quest;
     }
 
 }

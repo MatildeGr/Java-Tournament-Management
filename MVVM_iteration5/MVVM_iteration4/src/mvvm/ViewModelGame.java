@@ -13,7 +13,7 @@ import model.Game;
 import model.Match.Result;
 import model.Player;
 import model.Question;
-import undoableBuilding.MementoBuilding;
+import undoableBuilding.GameMemento;
 import undoableBuilding.UndoableBuilding;
 
 /**
@@ -22,7 +22,7 @@ import undoableBuilding.UndoableBuilding;
  */
 public class ViewModelGame {
 
-    private final Game game;
+    private final GameMemento game;
     private final IntegerProperty numQuest = new SimpleIntegerProperty(-1);
     private final StringProperty textPlayersMatch = new SimpleStringProperty();
     private final StringProperty quest = new SimpleStringProperty();
@@ -42,13 +42,14 @@ public class ViewModelGame {
     private final StringProperty hintText = new SimpleStringProperty();
     private boolean hintselected = false;
     private boolean firstBadAnswer = true;
+    private UndoableBuilding building;
 
     private final static int POINT_TO_REMOVE_IF_HINT = 2;
     private final static int POINT_TO_REMOVE_IF_FAKEHINT = 1;
     private final static int POINT_TO_REMOVE_IF_NOT_HINT = 0;
     private final static int POINTTOHIND = 3;
 
-    public ViewModelGame(Game game) {
+    public ViewModelGame(GameMemento game) {
         this.game = game;
         setTextPlayersMatch();
         nextQuestionOrEndGame();
@@ -188,19 +189,18 @@ public class ViewModelGame {
             addEarnedPoints();
         } else {
             if (firstBadAnswer) {
-                UndoableBuilding building = new MementoBuilding(game.getQuestion(numQuest.get()));
                 firstBadAnswer = false;
-            }
-            else{
-                //building.
+                game.addQuestion(game.getQuestion(numQuest.get()));
+            } else {
+                game.addQuestion(game.getQuestion(numQuest.get()));
             }
         }
         nextQuestionOrEndGame();
     }
 
     public void goBack() {
-        if (firstBadAnswer && !matchQuestionAnswer()) {
-            //building.undo();
+        if (!firstBadAnswer) {
+            game.undo();
         }
     }
 

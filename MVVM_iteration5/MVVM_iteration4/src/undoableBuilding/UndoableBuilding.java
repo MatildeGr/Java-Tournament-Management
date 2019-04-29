@@ -1,12 +1,12 @@
 package undoableBuilding;
 
-import building.Building;
-import model.Question;
+import model.ConstructGame;
+import model.Game;
 
-public abstract class UndoableBuilding extends Building {
+public abstract class UndoableBuilding extends Game {
 
-    public UndoableBuilding(Question quest) {
-        super(quest);
+    public UndoableBuilding(ConstructGame game) {
+        super(game);
     }
     
     public abstract void undo();

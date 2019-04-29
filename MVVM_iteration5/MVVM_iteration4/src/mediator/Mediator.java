@@ -3,13 +3,13 @@ package mediator;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ConstructGame;
-import model.Game;
 import model.ListTournament;
 import model.Match.Result;
 import model.Player;
 import mvvm.ViewModel;
 import mvvm.ViewModelConstructQuest;
 import mvvm.ViewModelGame;
+import undoableBuilding.GameMemento;
 import view.View;
 import view.ViewContructQuestionGame;
 import view.ViewGame;
@@ -49,7 +49,7 @@ public class Mediator {
         ConstructGame newGame = new ConstructGame(p1, p2);
         constructionPartie(newGame);
         if (!newGame.canceled()) {
-            Game game = new Game(newGame);
+            GameMemento game = new GameMemento(newGame);
             playGame(game);
             if (!game.canceled()) {
                 res = game.result();
@@ -73,11 +73,12 @@ public class Mediator {
         stage.showAndWait();
     }
 
-    private void playGame(Game game) {
+    private void playGame(GameMemento game) {
         Stage stage = new Stage();
         ViewModelGame viewModel = new ViewModelGame(game);
         ViewGame view = new ViewGame(stage, viewModel);
         stage.initModality(Modality.APPLICATION_MODAL);
+        
         stage.showAndWait();
     }
 }

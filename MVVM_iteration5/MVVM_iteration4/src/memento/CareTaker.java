@@ -5,15 +5,20 @@
  */
 package memento;
 
+import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
  * @author Matilde
  */
 public class CareTaker {
-    private final Queue<Memento> mementos = new ConcurrentLinkedQueue<>();
+
+    private final Queue<Memento> mementos = new LinkedList<>();
+
+    public CareTaker() {
+
+    }
 
     public CareTaker(Memento memento) {
         mementos.add(memento);
@@ -21,12 +26,11 @@ public class CareTaker {
 
     public void gardeMemento(Memento mem) {
         mementos.add(mem);
+        System.out.println("Quest bien ajouté dans la liste");
     }
 
     public Memento getMemento() {
-        if(mementos.size() > 1)
-            return mementos.poll();
-        return mementos.peek();
+        return mementos.poll();
     }
 
 }
