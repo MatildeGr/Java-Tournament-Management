@@ -8,7 +8,6 @@ package undoableBuilding;
 import memento.CareTaker;
 import memento.Memento;
 import model.ConstructGame;
-import model.Question;
 
 /**
  *
@@ -18,41 +17,50 @@ public class GameMemento extends UndoableBuilding {
 
     private final CareTaker careTaker;
 
-    public GameMemento(ConstructGame game) {
+    public GameMemento(ConstructGame game, int numQuest) {
         super(game);
         careTaker = new CareTaker();
     }
 
-    public void addQuestion(Question question){
-        careTaker.gardeMemento(createMemento());//ajoute au queue
-        super.setCurrentQuestion(question);//set dans le model.
+    public void addQuestion(int numQuest) {
+        careTaker.gardeMemento(createMemento());
+        super.setNumCurrentQuestion(numQuest);//set dans le model.
     }
-    
+
     @Override
     public void undo() {
-        System.out.println("Retour en arrière :");
+        //System.out.println("Retour en arrière :");
         setMemento(careTaker.getMemento());
+
     }
 
     private Memento createMemento() {
-        return new MementoImpl(getCurrentQuestion());
+        return new MementoImpl(getNumCurrentQuest());
     }
 
     private void setMemento(Memento m) {
         MementoImpl memento = (MementoImpl) m;
-        setCurrentQuestion(memento.getQuestion());
+        setNumCurrentQuestion(memento.getNumQuest());
+
     }
 
     private class MementoImpl implements Memento {
 
-        private final Question quest;
+        //private final Question quest;
+        private final int numQuest;
+        //private final int reponsedonner;
 
-        private MementoImpl(Question quest) {
-            this.quest = new Question(quest);
+        private MementoImpl(int numQuest) {
+            this.numQuest = numQuest;
+            //this.reponsedonner = reponse;
         }
 
-        private Question getQuestion() {
-            return getCurrentQuestion();
+        private int getNumQuest() {
+            return numQuest;
         }
+
+//        private int getReponse(){
+//            return reponsedonner;
+//        }
     }
 }

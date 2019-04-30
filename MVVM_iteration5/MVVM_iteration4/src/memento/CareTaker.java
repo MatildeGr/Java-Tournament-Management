@@ -24,9 +24,14 @@ public class CareTaker {
         mementos.add(memento);
     }
 
+    public void deleteMemento(Memento mem) {
+        mementos.remove(mem);
+    }
+
     public void gardeMemento(Memento mem) {
         mementos.add(mem);
-        System.out.println("Quest bien ajouté dans la liste");
+       // System.out.println("Quest bien ajouté dans la liste");
+
     }
 
     public Memento getMemento() {

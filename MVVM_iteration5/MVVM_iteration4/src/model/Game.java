@@ -15,6 +15,7 @@ public class Game {
     private boolean canceled = false;
     private Result res;
     private Question currentQuestion;
+    public int numCurrentQuest;
     private ConstructGame constructGame;
 
     public Game(ConstructGame game) {
@@ -45,6 +46,7 @@ public class Game {
     //retourne une question a une position donnéé
     public Question getQuestion(int index) {
         currentQuestion = ls.get(index);
+        numCurrentQuest = index;
         return currentQuestion;
     }
 
@@ -97,8 +99,12 @@ public class Game {
             return currentQuestion;
     }
 
-    public void setCurrentQuestion(Question quest) {
-        currentQuestion = quest;
+    public void setNumCurrentQuestion(int numQuest) {
+        numCurrentQuest = numQuest;
+    }
+    
+    public int getNumCurrentQuest(){
+        return numCurrentQuest;
     }
 
 }

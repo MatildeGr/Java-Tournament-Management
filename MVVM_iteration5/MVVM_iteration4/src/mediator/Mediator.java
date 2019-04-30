@@ -49,7 +49,7 @@ public class Mediator {
         ConstructGame newGame = new ConstructGame(p1, p2);
         constructionPartie(newGame);
         if (!newGame.canceled()) {
-            GameMemento game = new GameMemento(newGame);
+            GameMemento game = new GameMemento(newGame,-1);
             playGame(game);
             if (!game.canceled()) {
                 res = game.result();

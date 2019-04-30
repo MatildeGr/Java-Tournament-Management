@@ -9,12 +9,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import model.Game;
 import model.Match.Result;
 import model.Player;
 import model.Question;
 import undoableBuilding.GameMemento;
-import undoableBuilding.UndoableBuilding;
 
 /**
  *
@@ -42,7 +40,8 @@ public class ViewModelGame {
     private final StringProperty hintText = new SimpleStringProperty();
     private boolean hintselected = false;
     private boolean firstBadAnswer = true;
-    private UndoableBuilding building;
+    private boolean isUndo = false;
+    private int numQuestBeforeUndo = -1;
 
     private final static int POINT_TO_REMOVE_IF_HINT = 2;
     private final static int POINT_TO_REMOVE_IF_FAKEHINT = 1;
@@ -181,7 +180,6 @@ public class ViewModelGame {
     }
 
     //confirme une reponse, ajoute les points si reponse juste 
-    //Créer le memento si première mauvaise réponse. 
     //Ajoute question au memento lorsque réponse fausse.
     //ferme la page si confirm et fin de qestionnaire
     public void confirm() {
@@ -190,10 +188,8 @@ public class ViewModelGame {
         } else {
             if (firstBadAnswer) {
                 firstBadAnswer = false;
-                game.addQuestion(game.getQuestion(numQuest.get()));
-            } else {
-                game.addQuestion(game.getQuestion(numQuest.get()));
             }
+            game.addQuestion(numQuest.get());
         }
         nextQuestionOrEndGame();
     }
@@ -201,13 +197,22 @@ public class ViewModelGame {
     public void goBack() {
         if (!firstBadAnswer) {
             game.undo();
+            isUndo = true;
+            numQuestBeforeUndo = numQuest.get();
+            nextQuestionWhenUndo();
         }
+
     }
 
     //increment le numero de question ou termine le jeux
     private void nextQuestionOrEndGame() {
         if (canNextQuestion()) {
-            nextQuestion();
+            if (isUndo) {
+                isUndo = false;
+                nextQuestionAfterUndo();
+            } else {
+                nextQuestion();
+            }
         } else {
             endGame();
         }
@@ -282,6 +287,20 @@ public class ViewModelGame {
     private void nextQuestion() {
         clearHint();
         numQuest.set(numQuest.get() + 1);
+        setTextNumCurrentQuestion();
+        setQuestion(numQuest.get());
+    }
+
+    private void nextQuestionAfterUndo() {
+        clearHint();
+        numQuest.set(numQuestBeforeUndo);
+        setTextNumCurrentQuestion();
+        setQuestion(numQuestBeforeUndo);
+    }
+
+    private void nextQuestionWhenUndo() {
+        clearHint();
+        numQuest.set(game.getNumCurrentQuest());
         setTextNumCurrentQuestion();
         setQuestion(numQuest.get());
     }
