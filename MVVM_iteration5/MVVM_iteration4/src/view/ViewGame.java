@@ -56,6 +56,7 @@ public class ViewGame {
     private final HBox btn = new HBox(), hbMatch = new HBox(), hbTitle = new HBox(), hbPoint = new HBox();
 
     private final IntegerProperty numRepSelected = new SimpleIntegerProperty();
+    private final IntegerProperty numRepUndo = new SimpleIntegerProperty();
     private final BooleanProperty close = new SimpleBooleanProperty();
 
     public ViewGame(Stage stage, ViewModelGame viewModel) {
@@ -172,6 +173,9 @@ public class ViewGame {
         close.bind(viewModel.closeProperty());
         hint.visibleProperty().bind(viewModel.setVisibleHintProperty());
         hintText.textProperty().bind(viewModel.hintTextProperty());
+        goBack.visibleProperty().bind(viewModel.setGoBackProperty());
+        numRepUndo.bind(viewModel.numRepUndoProperty());
+         setDisableNumRepFalse();
     }
 
     //
@@ -240,5 +244,20 @@ public class ViewGame {
                 stage.close();
             }
         });
+    }
+
+    private void setDisableNumRepFalse() {
+        if (numRepUndo.get() == 1) {
+            r1.setDisable(true);
+        }
+        if (numRepUndo.get() == 2) {
+            r2.setDisable(true);
+        }
+        if (numRepUndo.get() == 3) {
+            r3.setDisable(true);
+        }
+        if (numRepUndo.get() == 4) {
+            r4.setDisable(true);
+        }
     }
 }

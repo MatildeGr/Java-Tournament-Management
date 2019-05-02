@@ -23,15 +23,13 @@ public class CareTaker {
     public CareTaker(Memento memento) {
         mementos.add(memento);
     }
-
-    public void deleteMemento(Memento mem) {
-        mementos.remove(mem);
-    }
-
+    
     public void gardeMemento(Memento mem) {
         mementos.add(mem);
-       // System.out.println("Quest bien ajouté dans la liste");
+    }
 
+    public boolean isEmptyMemento() {
+        return mementos.isEmpty();
     }
 
     public Memento getMemento() {

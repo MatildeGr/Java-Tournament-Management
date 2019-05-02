@@ -15,7 +15,8 @@ public class Game {
     private boolean canceled = false;
     private Result res;
     private Question currentQuestion;
-    public int numCurrentQuest;
+    private int numCurrentQuest;
+    private int numRepDonner;
     private ConstructGame constructGame;
 
     public Game(ConstructGame game) {
@@ -95,16 +96,29 @@ public class Game {
         return res;
     }
 
+    //renvoie la question courante
     public Question getCurrentQuestion() {
             return currentQuestion;
     }
 
+    //set la question courante
     public void setNumCurrentQuestion(int numQuest) {
         numCurrentQuest = numQuest;
     }
     
+    //renvoie le numéro de la question courante
     public int getNumCurrentQuest(){
         return numCurrentQuest;
+    }
+    
+    //set le numéro de la réponse donnée.
+    public void setNumRepDonner(int numCurrentRep){
+        numRepDonner = numCurrentRep;
+    }
+    
+    //renvoie le numéro de la réponse donnée.
+    public int getNumRepDonner(){
+        return numRepDonner;
     }
 
 }

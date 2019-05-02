@@ -36,8 +36,10 @@ public class ViewModelGame {
     private final BooleanProperty close = new SimpleBooleanProperty(false);
     private final BooleanProperty cancel = new SimpleBooleanProperty(false);
     private final BooleanProperty setVisibleHint = new SimpleBooleanProperty();
-    private final BooleanProperty setGoBack = new SimpleBooleanProperty();
+    private final BooleanProperty setVisibleGoBack = new SimpleBooleanProperty();
     private final StringProperty hintText = new SimpleStringProperty();
+    private final IntegerProperty numRepUndo = new SimpleIntegerProperty(-1);
+
     private boolean hintselected = false;
     private boolean firstBadAnswer = true;
     private boolean isUndo = false;
@@ -152,7 +154,12 @@ public class ViewModelGame {
 
     //renvoie si le boutton revenir en arrière peut etre visible
     public BooleanProperty setGoBackProperty() {
-        return setGoBack;
+        return setVisibleGoBack;
+    }
+
+    //renvoie le numéro de la réponse donnée quand undo
+    public IntegerProperty numRepUndoProperty() {
+        return numRepUndo;
     }
 
     //
@@ -180,7 +187,7 @@ public class ViewModelGame {
     }
 
     //confirme une reponse, ajoute les points si reponse juste 
-    //Ajoute question au memento lorsque réponse fausse.
+    //Ajoute numéro question et numéro reponse au memento lorsque réponse fausse.
     //ferme la page si confirm et fin de qestionnaire
     public void confirm() {
         if (matchQuestionAnswer()) {
@@ -189,7 +196,7 @@ public class ViewModelGame {
             if (firstBadAnswer) {
                 firstBadAnswer = false;
             }
-            game.addQuestion(numQuest.get());
+            game.addQuestion(numQuest.get(), numRepSelected.get());
         }
         nextQuestionOrEndGame();
     }
@@ -249,7 +256,7 @@ public class ViewModelGame {
         reponse3.set(q.getReponseToString(2));
         reponse4.set(q.getReponseToString(3));
         setHint();
-
+        setGoBack();
     }
 
     private boolean stateForEndGame() {
@@ -301,6 +308,8 @@ public class ViewModelGame {
     private void nextQuestionWhenUndo() {
         clearHint();
         numQuest.set(game.getNumCurrentQuest());
+        numRepUndo.set(game.getNumRepDonner());
+        System.out.println(game.getNumRepDonner());
         setTextNumCurrentQuestion();
         setQuestion(numQuest.get());
     }
@@ -359,8 +368,29 @@ public class ViewModelGame {
         return currentQuestion().getIsFake();
     }
 
+    //Renvoie la question courante.
     private Question currentQuestion() {
         return game.getQuestion(numQuest.get());
+    }
+
+    //set la visibilité du bouton retour en arrière.
+    private void setVisibleGoBack(boolean b) {
+        setVisibleGoBack.set(!b);
+        setVisibleGoBack.set(b);
+    }
+
+    //set la visibilité du bouton retour en arrière.
+    private void setGoBack() {
+        if (canHadGoBack()) {
+            setVisibleGoBack(true);
+        } else {
+            setVisibleGoBack(false);
+        }
+    }
+
+    //Renvoie true si on peut avoir un retour en arriere.
+    private boolean canHadGoBack() {
+        return !game.isEmptyMemento();
     }
 
 }

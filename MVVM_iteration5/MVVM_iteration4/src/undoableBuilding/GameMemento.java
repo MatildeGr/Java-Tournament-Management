@@ -17,50 +17,52 @@ public class GameMemento extends UndoableBuilding {
 
     private final CareTaker careTaker;
 
-    public GameMemento(ConstructGame game, int numQuest) {
+    public GameMemento(ConstructGame game) {
         super(game);
         careTaker = new CareTaker();
     }
 
-    public void addQuestion(int numQuest) {
+    public void addQuestion(int numQuest, int numRep) {
         careTaker.gardeMemento(createMemento());
-        super.setNumCurrentQuestion(numQuest);//set dans le model.
+        super.setNumCurrentQuestion(numQuest);
+        super.setNumRepDonner(numRep);
     }
-
+    
+    public boolean isEmptyMemento(){
+        return careTaker.isEmptyMemento();
+    }
+    
     @Override
     public void undo() {
-        //System.out.println("Retour en arrière :");
         setMemento(careTaker.getMemento());
-
     }
 
     private Memento createMemento() {
-        return new MementoImpl(getNumCurrentQuest());
+        return new MementoImpl(getNumCurrentQuest(), getNumRepDonner());
     }
 
     private void setMemento(Memento m) {
         MementoImpl memento = (MementoImpl) m;
         setNumCurrentQuestion(memento.getNumQuest());
-
+        setNumRepDonner(memento.getNumReponse());
     }
 
     private class MementoImpl implements Memento {
 
-        //private final Question quest;
         private final int numQuest;
-        //private final int reponsedonner;
+        private final int reponsedonner;
 
-        private MementoImpl(int numQuest) {
+        private MementoImpl(int numQuest, int numRep) {
             this.numQuest = numQuest;
-            //this.reponsedonner = reponse;
+            this.reponsedonner = numRep;
         }
 
         private int getNumQuest() {
             return numQuest;
         }
 
-//        private int getReponse(){
-//            return reponsedonner;
-//        }
+        private int getNumReponse() {
+            return reponsedonner;
+        }
     }
 }
