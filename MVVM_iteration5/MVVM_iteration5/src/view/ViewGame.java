@@ -175,7 +175,6 @@ public class ViewGame {
         hintText.textProperty().bind(viewModel.hintTextProperty());
         goBack.visibleProperty().bind(viewModel.setGoBackProperty());
         numRepUndo.bind(viewModel.numRepUndoProperty());
-         setDisableNumRepFalse();
     }
 
     //
@@ -225,14 +224,19 @@ public class ViewGame {
     }
 
     private void setOnActionconfirm() {
-        confirm.setOnAction(e -> viewModel.confirm());
-
+        confirm.setOnAction(e -> {
+            viewModel.confirm();
+            clearDisableNumRep();
+        });
         cancel.setOnAction(e -> {
             viewModel.cancel();
             stage.close();
         });
 
-        goBack.setOnAction(e -> viewModel.goBack());
+        goBack.setOnAction(e -> {
+            viewModel.goBack();
+            setDisableNumRepFalse();
+        });
 
         stage.setOnCloseRequest(e -> viewModel.cancel());
     }
@@ -259,5 +263,12 @@ public class ViewGame {
         if (numRepUndo.get() == 4) {
             r4.setDisable(true);
         }
+    }
+
+    private void clearDisableNumRep() {
+        r1.setDisable(false);
+        r2.setDisable(false);
+        r3.setDisable(false);
+        r4.setDisable(false);
     }
 }

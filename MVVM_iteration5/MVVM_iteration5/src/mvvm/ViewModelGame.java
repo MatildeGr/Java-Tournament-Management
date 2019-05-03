@@ -1,6 +1,7 @@
 package mvvm;
 
 import java.util.Optional;
+import java.util.Random;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -44,6 +45,8 @@ public class ViewModelGame {
     private boolean firstBadAnswer = true;
     private boolean isUndo = false;
     private int numQuestBeforeUndo = -1;
+    private final static Random rand = new Random();
+    private final static int CHANCETOUNDO = 5;
 
     private final static int POINT_TO_REMOVE_IF_HINT = 2;
     private final static int POINT_TO_REMOVE_IF_FAKEHINT = 1;
@@ -309,7 +312,6 @@ public class ViewModelGame {
         clearHint();
         numQuest.set(game.getNumCurrentQuest());
         numRepUndo.set(game.getNumRepDonner());
-        System.out.println(game.getNumRepDonner());
         setTextNumCurrentQuestion();
         setQuestion(numQuest.get());
     }
@@ -381,7 +383,8 @@ public class ViewModelGame {
 
     //set la visibilité du bouton retour en arrière.
     private void setGoBack() {
-        if (canHadGoBack()) {
+        int chance = rand.nextInt(CHANCETOUNDO);
+        if (chance == CHANCETOUNDO - 1 && canHadGoBack()) {
             setVisibleGoBack(true);
         } else {
             setVisibleGoBack(false);

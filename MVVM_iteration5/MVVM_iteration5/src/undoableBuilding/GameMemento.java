@@ -23,28 +23,31 @@ public class GameMemento extends UndoableBuilding {
     }
 
     public void addQuestion(int numQuest, int numRep) {
-        careTaker.gardeMemento(createMemento());
         super.setNumCurrentQuestion(numQuest);
         super.setNumRepDonner(numRep);
+        careTaker.gardeMemento(createMemento());
+
     }
-    
-    public boolean isEmptyMemento(){
+
+    public boolean isEmptyMemento() {
         return careTaker.isEmptyMemento();
     }
-    
+
     @Override
     public void undo() {
         setMemento(careTaker.getMemento());
     }
 
     private Memento createMemento() {
-        return new MementoImpl(getNumCurrentQuest(), getNumRepDonner());
+        return new MementoImpl(numCurrentQuest, numRepDonner);
+
     }
 
     private void setMemento(Memento m) {
         MementoImpl memento = (MementoImpl) m;
-        setNumCurrentQuestion(memento.getNumQuest());
-        setNumRepDonner(memento.getNumReponse());
+        numCurrentQuest = memento.getNumQuest();
+        numRepDonner = memento.getNumReponse();
+
     }
 
     private class MementoImpl implements Memento {
